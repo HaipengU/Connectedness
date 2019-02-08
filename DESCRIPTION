@@ -1,11 +1,11 @@
 Package: Connectedness
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Connectedness Measurements 
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Date: 2019-02-08
+Author: Haipeng Yu
+Maintainer: Haipeng Yu <haipengyu@vt.edu>
+Description: Measure connectedness within or across management units.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
