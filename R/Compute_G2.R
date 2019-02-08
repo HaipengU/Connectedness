@@ -1,3 +1,17 @@
+#' Computation of genomic relationship matrix with SNP markers.
+#'
+#' Use genomic relationship matrix to compute genomic connectedness.
+#' 
+#' @param Wmatrix a raw SNP marker matrix with dimension n by m, where n is individual and m is marker. 
+#' @param maf a minor allele frequency used for quality control; e.g., 0.05
+#' 
+#' @return a n by n genomic relationship matrix.
+#' 
+#' @examples 
+#' computeG2()
+#' 
+#' @export
+#' 
 computeG2 <- function(Wmatrix, maf) {
     set.seed(1213)
     p1 <- (colMeans(Wmatrix, na.rm = T)/2)
