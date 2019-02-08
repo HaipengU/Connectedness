@@ -12,7 +12,7 @@
 #' 
 #' @export
 #' 
-computeG2 <- function(Wmatrix, maf) {
+compute_G2 <- function(Wmatrix, maf) {
     set.seed(1213)
     p1 <- (colMeans(Wmatrix, na.rm = T)/2)
     # imputation for missing markers with rbinom
