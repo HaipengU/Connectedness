@@ -1,36 +1,3 @@
-##########################################################################
-#### Function to calculate genomic relationship matrix (G2; VanRaden) ####
-##########################################################################
-computeG2 <- function(Wmatrix, maf) {
-    set.seed(1213)
-    p1 <- (colMeans(Wmatrix, na.rm = T)/2)
-    # imputation for missing markers with rbinom
-    for (j in 1:ncol(Wmatrix)){
-      Wmatrix[,j] <- ifelse(is.na(Wmatrix[,j]), rbinom(1,2,p1[j]), Wmatrix[,j])
-    }
-    # remove snp with less than 0.05 MAF
-    p2 <- colMeans(Wmatrix)/2
-    maf2 <- pmin(p2,1-p2)
-    maf.index <- which(maf2 < maf)
-    W <- Wmatrix[,-maf.index]#
-    W_cs <- scale(W)
-    Gmatrix <- tcrossprod(W_cs)/ncol(W_cs)
-    return(Gmatrix)
-} 
-
-#######################################################
-####### Function to estimate variance components ######
-#######################################################
-var_est <- function(y,K,X){
-  library(rrBLUP)
-  GBLUP <- mixed.solve(y = y, K = K, X = X)
-  varcomp <- list(sigma2a = GBLUP$Vu, sigma2e = GBLUP$Ve)
-  return(varcomp)
-}
-
-#############################################################################
-#### Function to calculate connectedness with statistics of PEVD, CD and r ##
-#############################################################################
 GCfunc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU){
   if (is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
   Zi <- diag(x = 1, nrow = nrow(Kmatrix),ncol = nrow(Kmatrix))
@@ -100,10 +67,3 @@ GCfunc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, Nu
     }
   }
 }
-
-
-
-
-
-
-
