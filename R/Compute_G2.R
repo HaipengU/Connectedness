@@ -8,11 +8,11 @@
 #' @return a n by n genomic relationship matrix.
 #' 
 #' @examples 
-#' computeG2()
+#' Compute_G2()
 #' 
 #' @export
 #' 
-compute_G2 <- function(Wmatrix, maf) {
+Compute_G2 <- function(Wmatrix, maf) {
     set.seed(1213)
     p1 <- (colMeans(Wmatrix, na.rm = T)/2)
     # imputation for missing markers with rbinom
