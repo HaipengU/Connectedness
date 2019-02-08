@@ -1,4 +1,23 @@
-GCfunc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU){
+#' Measurement of connectedness.
+#'
+#' The estimates of connectedness across management units.
+#' 
+#' @param Kmatrix a n by n relationship matrix. 
+#' @param Xmatrix a design matrix which associates fixed effects with phenotypes. 
+#' @param sigma2a additive genetic variance.
+#' @param sigma2e residual variance.
+#' @param MUScenario a vector of managment units which will be treatd as a factor. 
+#' @param statistic a statistic which will be used to measure connectedness.
+#' @param NumofMU number of management unit used to calculate connectedness. 
+#' 
+#' @return a matrix of connectedness measurements.
+#' 
+#' @examples 
+#' GC()
+#' 
+#' @export
+#' 
+GC <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU){
   if (is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
   Zi <- diag(x = 1, nrow = nrow(Kmatrix),ncol = nrow(Kmatrix))
   Zitr <- t(Zi)
