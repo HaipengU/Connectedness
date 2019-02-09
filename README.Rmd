@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 An R package to measure connectedness across management units with genomic or pedigree data. 
 
 ## Installation
-Connectedness is currently available in Github, and can be installed with with devtools package: 
+Connectedness is currently available in Github, and can be installed with devtools package: 
 
 1. Install `devtools` package from CRAN. 
 ```{r, warning = FALSE, message = FALSE, results = 'hide'}

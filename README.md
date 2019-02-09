@@ -9,7 +9,7 @@ genomic or pedigree data.
 ## Installation
 
 Connectedness is currently available in Github, and can be installed
-with with devtools package:
+with devtools package:
 
 1.  Install `devtools` package from CRAN.
 
