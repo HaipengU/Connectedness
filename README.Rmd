@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit README.Rmd (this file) -->
+
+```{r setup, echo = FALSE, warning = FALSE}
+chooseCRANmirror(graphics = FALSE, ind = 1)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Connectedness
+An R package to measure connectedness across management units with genomic or pedigree data. 
+
+## Installation
+Connectedness is currently available in Github, and can be installed with with devtools package: 
+
+1. Install `devtools` package from CRAN. 
+```{r, warning = FALSE, message = FALSE, results = 'hide'}
+install.packages("devtools")
+```
+
+2. Load the `devtools` package.
+```{r, warning = FALSE, results = 'hide'}
+library(devtools)
+```
+
+3. Install `Connectedness` package from Github.
+```{r, warning = FALSE, results = 'hide', message = FALSE}
+install_github('HaipengU/Connectedness')
+```
+
+4. Load `Connectedness` package. 
+```{r, warning = FALSE, results = 'hide'}
+library(Connectedness)
+```
+
+
+
