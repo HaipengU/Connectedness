@@ -84,5 +84,43 @@ GC <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofM
     } else if (NumofMU == 'Overall'){
       return(rij.across.contrast.overall)
     }
+  } else if (statistic == 'VED'){
+    # calculate (Z'Z + K-1lambda)-1
+    C22_inv <- solve(crossprod(Zi) + Kinv*lamda)
+    # calculate var(B_hat)
+    var_Bhat <- solve(crossprod(X) - (crossprod(X,Zi) %*% C22_inv %*% crossprod(Zi,X))) * sigma2e
+    # calculate pairwise VED
+    VED <- matrix(NA,ncol=ncol(var_Bhat),nrow=nrow(var_Bhat))
+    for (i in 1:ncol(VED) - 1){
+      for (j in (i+1):ncol(VED)){
+        VED[i,j] <- VED[j,i] <- (var_Bhat[i,i] + var_Bhat[j,j] - 2*var_Bhat[i,j])
+      }
+    }
+    # Overall VED across all pairwise VED 
+      VED.overall <- mean(VED[upper.tri(VED)])
+      if (NumofMU == 'Pairwise'){
+        return(VED)
+      } else if (NumofMU == 'Overall'){
+        return(VED.overall)
+      }
+  } else if (statistic == 'CR'){
+    # calculate (Z'Z + K-1lambda)-1
+    C22_inv <- solve(crossprod(Zi) + Kinv*lamda)
+    # calculate var(B_hat)
+    var_Bhat <- solve(crossprod(X) - (crossprod(X,Zi) %*% C22_inv %*% crossprod(Zi,X))) * sigma2e
+    # calculate pairwise VED
+    CR <- matrix(NA,ncol=ncol(var_Bhat),nrow=nrow(var_Bhat))
+    for (i in 1:ncol(CR) - 1){
+      for (j in (i+1):ncol(CR)){
+        CR[i,j] <- CR[j,i] <- (var_Bhat[i,j]/sqrt(var_Bhat[i,i] * var_Bhat[j,j]))
+      }
+    }
+    # Overall VED across all pairwise VED 
+    CR.overall <- mean(CR[upper.tri(CR)])
+    if (NumofMU == 'Pairwise'){
+      return(CR)
+    } else if (NumofMU == 'Overall'){
+      return(CR.overall)
+    }
   }
 }

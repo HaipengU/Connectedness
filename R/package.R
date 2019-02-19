@@ -7,5 +7,4 @@
 #' @author HaipengYu <\url{https://haipengu.github.io/}>
 #' @seealso 
 #' 
-#' @references 
 NULL
