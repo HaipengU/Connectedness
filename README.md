@@ -42,3 +42,7 @@ install_github('HaipengU/Connectedness')
 ``` r
 library(Connectedness)
 ```
+
+## Documentation
+
+[Vignette](Vignettes/Vignette.html)
