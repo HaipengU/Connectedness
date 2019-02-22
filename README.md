@@ -45,4 +45,4 @@ library(Connectedness)
 
 ## Documentation
 
-[Vignette](Vignettes/Vignette.html)
+[Vignette](Vignettes/Vignette.Rmd)
