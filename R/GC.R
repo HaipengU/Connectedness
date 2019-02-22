@@ -66,9 +66,9 @@ GC <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofM
     } else if (NumofMU == 'Overall') {
       return(CD.across.contrast.overall)
     }
-  } else if (statistic == 'r') {
+  } else if (statistic == 'r1') {
     rijK<- cov2cor(PEVK)
-    rij.contrast <- matrix(NA,ncol = length(Management_Unit),nrow = length(Management_Unit))
+    rij.contrast <- matrix(NA,ncol=length(Management_Unit),nrow=length(Management_Unit))
     colnames(rij.contrast) <- rownames(rij.contrast) <- Management_Unit
     for (i in 1:(length(Management_Unit)-1)) {
       for(j in (i+1):length(Management_Unit)) {
@@ -79,9 +79,26 @@ GC <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofM
       }
     }
     rij.across.contrast.overall <- mean(rij.contrast[upper.tri(rij.contrast)]) 
-    if (NumofMU == 'Pairwise') {
+    if (NumofMU == 'Pairwise'){
       return(rij.contrast)
-    } else if (NumofMU == 'Overall') {
+    } else if (NumofMU == 'Overall'){
+      return(rij.across.contrast.overall)
+    }
+  } else if (statistic == 'r2'){
+    rij.contrast <- matrix(NA,ncol=length(Management_Unit),nrow=length(Management_Unit))
+    colnames(rij.contrast) <- rownames(rij.contrast) <- Management_Unit
+    for (i in 1:(length(Management_Unit)-1)) {
+      for(j in (i+1):length(Management_Unit)) {
+        indexi <- which(MUScenario == Management_Unit[i])
+        indexj <- which(MUScenario == Management_Unit[j])
+        rij.contrast[i,j]<- rij.contrast[j,i]<- 
+          sum(PEVK[indexi,indexj])/sqrt(sum(PEVK[indexi,indexi])* sum(PEVK[indexj,indexj]))
+      }
+    }
+    rij.across.contrast.overall <- mean(rij.contrast[upper.tri(rij.contrast)]) 
+    if (NumofMU == 'Pairwise'){
+      return(rij.contrast)
+    } else if (NumofMU == 'Overall'){
       return(rij.across.contrast.overall)
     }
   } else if (statistic == 'VED') {
