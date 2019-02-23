@@ -45,4 +45,4 @@ library(Connectedness)
 
 ## Documentation
 
-[Vignette](Vignettes/Vignette.Rmd)
+[Vignette](https://haipengu.github.io/Rmd/Vignette.html)
