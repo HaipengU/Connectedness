@@ -3,8 +3,9 @@
 
 # Connectedness
 
-An R package to measure connectedness across management units with
-genomic or pedigree data.
+An R package to 1) measure connectedness across management units using
+genomic or pedigree data and 2) assess connectedness between training
+and testing sets in genomic prediction.
 
 ## Installation
 
