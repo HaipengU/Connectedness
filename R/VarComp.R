@@ -9,11 +9,11 @@
 #' @return a lit of variance components.
 #' 
 #' @examples 
-#' var_est()
+#' VarComp()
 #' 
 #' @export
 #' 
-VarComp_est <- function(y,K,X){
+VarComp <- function(y,K,X){
   library(rrBLUP)
   GBLUP <- mixed.solve(y = y, K = K, X = X)
   varcomp <- list(sigma2a = GBLUP$Vu, sigma2e = GBLUP$Ve)
