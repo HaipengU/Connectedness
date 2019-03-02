@@ -1,6 +1,6 @@
 #' \strong{Connectedness}: Measurement of genetic connectedness 
 #'
-#' This is an R package to estimate the genetic connectedness across management units.
+#' An R package to 1) measure the connectedness across management units using genomic or pedigree data and 2) assess the connectedness between training and testing sets in genomic prediction.
 #' @section GC function:
 #' GC()
 #' @section ComputeG function:
@@ -13,5 +13,7 @@
 #' 
 #' @seealso 
 #' Useful links:
-#' <\url{https://haipengu.github.io/}>
+#' \itemize{
+#'   \item <\url{https://haipengu.github.io/}>
+#' }
 NULL

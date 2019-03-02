@@ -1,0 +1,178 @@
+---
+title: "Connectedness Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Connectedness Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+**Prediction Error Variance (PEV)**
+
+Genetic connectedness is typically defined as a function of the inverse of the coefficient matrix (i.e., Prediction error variance (PEV)). The PEV can be obtained from Henderson's mixed model equations (MME). Assume a standard linear mixed model $\mathbf{y} = \mathbf{Xb} + \mathbf{Zu} + \boldsymbol{\epsilon}$, where $\mathbf{y}$, $\mathbf{b}$, $\mathbf{u}$ and $\boldsymbol{\epsilon}$ refer to a vector of phenotypes, effects of management units, random additive genetic effects and residuals, respectively. The $\mathbf{X}$ and $\mathbf{Z}$ are incidence matrices which associate management units effects and individuals to phenotypes, respectively. The inverse of the MME coefficient matrix derived from this model is 
+\begin{align*}
+\mathbf{C}^{-1} &= 
+\begin{bmatrix}
+ \mathbf{X'X} &      \mathbf{X'Z} \\
+    \mathbf{Z'X} &     \mathbf{Z'Z} +  \mathbf{K}^{-1} \lambda  
+ \end{bmatrix}^{-1} \\
+&= 
+\begin{bmatrix}
+    \mathbf{C}^{11} & \mathbf{C}^{12} \\
+     \mathbf{C}^{21} & \mathbf{C}^{22}
+\end{bmatrix} 
+\end{align*}
+where $\lambda$ is the ratio of variance components $\frac{\sigma^2_{\epsilon}}{\sigma^2_u}$. With this, the PEV matrix can be computed as 
+\begin{align*}
+\text{PEV} &= (\mathbf{Z'MZ} + \mathbf{K}^{-1} \lambda)^{-1} \sigma^2_{\epsilon} \\
+&= \mathbf{C}^{22} \sigma^2_{\epsilon}, 
+\end{align*}
+where $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}' \mathbf{X})^{-}\mathbf{X}'$ is the absorption (projection) matrix for fixed effects. 
+
+**Variance of Estimates of Management Units Effects(Var($\widehat{B}$))**
+
+The derivation of PEV results in a high computational demanding for the high-dimensional dataset. Alternatively, Kennedy and Trus proposed a quantification of connectedness with variance of management units estimates, which is 
+$$ \text{Var}({\widehat{B})} = [\mathbf{X}' \mathbf{X} - \mathbf{X}' \mathbf{Z}(\mathbf{Z'Z} + \mathbf{K}^{-1} \lambda)^{-1}\mathbf{Z}' \mathbf{X}]^{-1}\sigma^2_{\epsilon}$$
+
+
+## Connectedness Statistics
+### Prediction Error Variance of Difference (PEVD)
+The PEVD measures the prediction error variance difference of breeding values between individuals from different management units. The PEVD between two individuals of $i$ and $j$ can be expressed as
+\begin{align*} 
+ \text{PEVD}(\hat{g_i} - \hat{g_j})  &= [ \text{PEV}(\hat{g_i}) + \text{PEV}(\hat{g_j}) - 2  \text{PEC}(\hat{g_i}, \hat{g_j})]  \\
+ &= (\mathbf{C}^{22}_{ii} - \mathbf{C}^{22}_{ij} - \mathbf{C}^{22}_{ji} + \mathbf{C}^{22}_{jj}) \sigma^2_{\epsilon} \\
+&= (\mathbf{C}^{22}_{ii}  + \mathbf{C}^{22}_{jj} - 2\mathbf{C}^{22}_{ij}) \sigma^2_{\epsilon} , 
+\end{align*}
+where PEC$_{ij}$ is the off-diagonal element of the PEV matrix which indicates the prediction error covariance or covariance between errors of genetic values. A summary of PEVD across any pair of management units under a contrast form is \begin{align*}
+\text{PEVD}(\mathbf{x}) &= \mathbf{x}' \mathbf{C}^{22} \mathbf{x} \sigma^2_{\epsilon},
+\end{align*} 
+where the sum of elements in $\mathbf{x}$ equals to zero. 
+
+**Example**
+
+Use `?cattle` to learn more about this cattle dataset.
+```{r warning = FALSE, message = FALSE, results = 'hide',eval = FALSE}
+# Load cattle dataset from Connectedness package.
+library(Connectedness)
+data(GCcattle)
+
+# Construct numerator relationship matrix (NRM)
+library(kinship2)
+A <- 2*kinship(cattle.pheno$Progeny, cattle.pheno$Sire, cattle.pheno$Dam)
+
+# X matrix of least connected design
+X_fixed <- model.matrix(~ -1 + factor(cattle.pheno$Management-Unit)) 
+
+# Estimate variance components
+varcomp <- VarComp_est(cattle.pheno$Phen, A, X_fixed)
+varcomp$sigma2a # variance of additive genetic effects
+varcomp$sigma2e # varaince of residual
+
+# Calculate PEVD 
+pevd_connectedness <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                        sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                        statistic = 'PEVD', NumofMU = 'Pairwise')
+pevd_connectedness # elements of Pairwise PEVD
+```
+
+
+### Coefficient of Determination (CD)
+The coefficient of determination (CD) measures the precision of the estimates breeding values. The pair-wise CD between individual $i$ and $j$ is defined as
+\begin{align*}
+\text{CD}_{ij} &= \frac{var(\mathbf{g}) - var(\mathbf{g}|\mathbf{\hat{g}})}{var(\mathbf{g})} \\
+&= 1 - \frac{var(\mathbf{g}|\mathbf{\hat{g}})}{var(\mathbf{g})} \\
+&= 1 - \lambda \frac{\mathbf{C}^{22}_{ii} + \mathbf{C}^{22}_{jj} - 2\mathbf{C}^{22}_{ij} }{\mathbf{K}_{ii} + \mathbf{K}_{jj} - 2\mathbf{K}_{ij}}. 
+\end{align*}
+A contrast notation of summary CD between any pair of management units is 
+\begin{align*}
+\text{CD}(\mathbf{x}) &= 1 - \frac{var(\mathbf{x}'\mathbf{g}|\mathbf{\hat{g}})}{var(\mathbf{x}'\mathbf{g})} \\
+&= 1- \lambda \frac{ \mathbf{x}' \mathbf{C}^{22} \mathbf{x} }{ \mathbf{x}' \mathbf{K} \mathbf{x}},
+\end{align*}
+where $\mathbf{x}$ is a contrast vector defined above and $\mathbf{K}$ is relationship matrix. 
+
+**Example**
+```{r eval = FALSE}
+# CD with least connected design
+cd_connectedness <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                        sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                        statistic = 'CD', NumofMU = 'Pairwise')
+
+cd_connectedness # elements of pairwise CD
+```
+
+### Prediction Error Correlation (r)
+The pairwise r statistic between individual $i$ and $j$ can be derived from PEV matrix to a predictive error correlation matrix as 
+\begin{align*}
+\text{r}_{ij} = \frac{\text{PEC}(\hat{g_i}, \hat{g_j})}{\sqrt{\text{PEV}(\hat{g_i})  \text{PEV}(\hat{g_j})}}.
+\end{align*}
+
+- **Flock connectedness**
+One of the summary statistics of r is flock connectedness, which takes the average of PEV matrix by management units followed by a ratio to r. The Flock r between two management units $i'$ and $j'$ is given by  
+\begin{align*}
+\text{r}_{i'j'} &= \frac{ 1/n_{i'} \sum \text{PEC}_{i' j'} 1/n_{j'}}{   \sqrt{ (1/n_{i'})^2 \sum \text{PEV}_{i' i'} \cdot (1/n_{j'})^2 \sum \text{PEV}_{j' j'} }   } \\
+&= \frac{ \sum \text{PEC}_{i' j'} }{   \sqrt{  \sum \text{PEV}_{i' i'} \cdot  \sum \text{PEV}_{j' j'} }   }, 
+\end{align*}
+where $n_{i'}$ and $n_{j'}$ indcate the number of individuals in units $i'$ and $j'$, respectively. 
+- **Individual connectedness**
+The summary of individual connectedness calculates pairwise r for all pair of individuals followed by averaging all r across management units: 
+\begin{align*}
+\text{r}_{i'j'} = \overline{\sum{\frac{\text{PEC}(\hat{g_{i'}}, \hat{g_{j'}})}{\sqrt{\text{PEV}(\hat{g_{i'}})  \text{PEV}(\hat{g_{j'}})}}}}.
+\end{align*}
+
+**Example**
+```{r eval = F}
+# Flock connectedness
+flock_r <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                  sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                  statistic = 'r2', NumofMU = 'Pairwise')
+flock_r # contents of flock r
+
+# Individual connectedness
+individual_r <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                  sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                  statistic = 'r1', NumofMU = 'Pairwise')
+individual_r # contents of flock r
+```
+
+### Variance of Differences in Management Units Effects (VED)
+The VED statistic estimates connectedness with the variance of differences of management units effects. The VED between two units $i'$ and $j'$ is defined as
+\begin{align*}
+\text{VED}_{i'j'} &=
+\text{Var}(\widehat{B})_{i'i'} + \text{Var}(\widehat{B})_{j'j'} - 2\text{Cov}(\widehat{B})_{i'j'},
+\end{align*}
+where Var$(\widehat{B})_{i'i'}$, Var$(\widehat{B})_{j'j'}$ and Cov$(\widehat{B})_{i'j'}$ indicate variance of management unit $i'$, $j'$ and covariance between two units, respectively. 
+
+**Example**
+```{r eval=FALSE}
+# VED of least connected design
+ved_connectedness <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                  sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                  statistic = 'VED', NumofMU = 'Pairwise')
+ved_connectedness # elements of VED
+```
+
+
+### Connectedness Rating (CR)
+The CR approximates flock connectedness by replacing PEV matrix with the variance of differences of management units estimates. The CR of two management units $i'$ and $j'$ is given by
+\begin{align*}
+\text{CR}_{i'j'} &=
+\frac{\text{Cov}(\widehat{B})_{i'j'} }{ \sqrt{ \text{Var}(\widehat{B})_{i'i'} \cdot  \text{Var}(\widehat{B})_{j'j'}}}.
+\end{align*}
+
+**Example**
+```{r eval=FALSE}
+cr_connectedness <- GC(Kmatrix = A, Xmatrix = X_fixed, sigma2a = varcomp$sigma2a, 
+                  sigma2e = varcomp$sigma2e, MUScenario = as.factor(cattle.pheno$Management-Unit), 
+                  statistic = 'CR', NumofMU = 'Pairwise')
+cr_connectedness # elements of CR
+```
+## Continue...
+## Authors
+- Haipeng Yu (<haipengyu@vt.edu>)
+- Mehdi Momen(<momenmehdi@vt.edu>)
+- Gota Morota (<morota@vt.edu>)
