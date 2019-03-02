@@ -1,8 +1,8 @@
 ---
-title: "Connectedness Package"
+title: "Connectedness"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Connectedness Package}
+  %\VignetteIndexEntry{Connectedness}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
