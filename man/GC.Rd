@@ -22,7 +22,8 @@ GC(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU)
 \item{NumofMU}{number of management unit used to calculate connectedness.}
 }
 \value{
-a matrix of connectedness measurements.
+A value of overall connectedness measurements across management units when NumofMU is set as 'Overall'.
+A matrix of connectedness measurments with diagnol as NA when when NumofMU is set as 'Pairwise'.
 }
 \description{
 The estimates of connectedness across management units.

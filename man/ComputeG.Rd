@@ -4,12 +4,14 @@
 \alias{ComputeG}
 \title{Computation of genomic relationship matrix with SNP markers.}
 \usage{
-ComputeG(Wmatrix, maf)
+ComputeG(Wmatrix, maf, type)
 }
 \arguments{
 \item{Wmatrix}{a raw SNP marker matrix with dimension n by m, where n is individual and m is marker.}
 
 \item{maf}{a minor allele frequency used for quality control; e.g., 0.05}
+
+\item{type}{a type of genomic relationship matrix}
 }
 \value{
 a n by n genomic relationship matrix.
