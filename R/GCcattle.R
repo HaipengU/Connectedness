@@ -3,7 +3,7 @@
 #' The cattle dataset is simulated with QMSim software (Sargolzaei and Schenkel, 2009).   
 #' This dataset includes 530 individuals across five generations (from founder to generation 4), 
 #' each with 10,000 single nucleotide polymorphisms spread over 29 autosomes. Single phenotype with heritability of 0.6 was simulated.
-#' Three fixed covariates of sex, the management unit, and covariate 3 are available.
+#' Two fixed covariates of sex and unit (management unit) are available.
 #'
 #' @docType data
 #' @name GCcattle
