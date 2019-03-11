@@ -1,6 +1,10 @@
 ---
 title: "Connectedness"
-output: rmarkdown::html_vignette
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: vignette
+    toc: true
 bibliography: references.bib
 vignette: >
   %\VignetteIndexEntry{Connectedness}
