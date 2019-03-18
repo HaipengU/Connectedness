@@ -30,12 +30,17 @@ library(devtools)
 
 3. Install `Connectedness` package from Github.
 ```{r, warning = FALSE, results = 'hide', message = FALSE, eval = FALSE}
-install_github('HaipengU/Connectedness')
+install_github('HaipengU/Connectedness', build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 4. Load `Connectedness` package. 
 ```{r, warning = FALSE, results = 'hide', eval = FALSE}
 library(Connectedness)
+```
+
+5. Load Vignette.
+```{r, warning = FALSE, results = 'hide', eval = FALSE}
+vignette('Connectedness', package = 'Connectedness')
 ```
 
 ## Documentation

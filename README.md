@@ -28,12 +28,13 @@ install.packages("devtools")
 library(devtools)
 ```
 
-3.  Install `Connectedness` package from Github.
+3.  Install `Connectedness` package from
+Github.
 
 <!-- end list -->
 
 ``` r
-install_github('HaipengU/Connectedness')
+install_github('HaipengU/Connectedness', build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 4.  Load `Connectedness` package.
@@ -42,6 +43,14 @@ install_github('HaipengU/Connectedness')
 
 ``` r
 library(Connectedness)
+```
+
+5.  Load Vignette.
+
+<!-- end list -->
+
+``` r
+vignette('Connectedness', package = 'Connectedness')
 ```
 
 ## Documentation
