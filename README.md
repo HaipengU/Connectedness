@@ -45,7 +45,7 @@ install_github('HaipengU/Connectedness', build_opts = c("--no-resave-data", "--n
 library(Connectedness)
 ```
 
-5.  Load Vignette.
+5.  View `Connectedness` vignette.
 
 <!-- end list -->
 
