@@ -8,11 +8,11 @@
 #' @return a n by n numerator relationship matrix.
 #' 
 #' @examples 
-#' ComputeA()
+#' computeA()
 #' 
 #' @export
 #' 
-ComputeA <- function(Progeny, Sire, Dam){
+computeA <- function(Progeny, Sire, Dam){
   if (any(duplicated(Progeny))) stop("Progeny must be unique")
   n <- length(Progeny)
   A <- diag(n)

@@ -1,21 +1,41 @@
-#' Estimate variance componets. 
+#' Estimates of variance componets. 
 #'
-#' Use rrBLUP to estimate variance components. 
+#' Maximum Likelihood estimation of variance components with eigenvectors.
 #' 
 #' @param y a n by 1 vector of phenotypes. 
-#' @param K a relationship matrix with a dimension of n by n.
-#' @param X a design matrix which associates fixed effects with y.
+#' @param Evector a n by n matrix with columns according to eigenvectors.
+#' @param Evalue a vector contains the n eigenvalues.
 #' 
-#' @return a lit of variance components.
+#' @return A list of variance components.
 #' 
 #' @examples 
-#' VarComp()
+#' varcomp()
 #' 
 #' @export
 #' 
-VarComp <- function(y,K,X){
-  library(rrBLUP)
-  GBLUP <- mixed.solve(y = y, K = K, X = X)
-  varcomp <- list(sigma2a = GBLUP$Vu, sigma2e = GBLUP$Ve)
-  return(varcomp)
+varcomp <- function(y, Evector, Evalue){
+  startVal <- c(0.5, 0.5)
+  var.opt <- optim(fn = log.Lik, y=y, Evector = Evector, Evalue = Evalue, par = startVal,
+                   hessian=FALSE) 
+  return(var.opt)
+}
+
+
+# loglikelihood func
+log.Lik <- function(y, Evector, Evalue, startVar){
+  y <- y - mean(y)
+  n <- length(y)
+  V <- Evector
+  D <- Evalue
+  V_y <- crossprod(V,y) 
+  V_2y <- as.vector(V_y)^2 
+  sigma2e <- startVar[1] 
+  sigma2a <- startVar[2] 
+  lambda <- sigma2a/sigma2e 
+  DStar <- (D * lambda + 1)
+  sumLogD <- log(prod(DStar))
+  part1 <- ( n * log(sigma2e) + sumLogD ) 
+  part2 <- (sum(V_2y/DStar)) / sigma2e
+  LogLik <- part1 + part2
+  return(LogLik)
 }

@@ -8,11 +8,11 @@
 #' @return a n by n genomic relationship matrix.
 #' 
 #' @examples 
-#' ComputeG()
+#' computeG()
 #' 
 #' @export
 #' 
-ComputeG <- function(Wmatrix, maf, type) {
+computeG <- function(Wmatrix, maf, type) {
   p1 <- (colMeans(Wmatrix, na.rm = T)/2)
   set.seed(0)
   for (j in 1:ncol(Wmatrix)) {

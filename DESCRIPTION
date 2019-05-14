@@ -1,9 +1,9 @@
-Package: Connectedness
+Package: GCA
 Type: Package
 Title: Connectedness Measurements 
 Version: 0.1.0
 Date: 2019-02-08
-Author: Haipeng Yu
+Author: Haipeng Yu, Gota Morota
 Maintainer: Haipeng Yu <haipengyu@vt.edu>
 Description: Measure connectedness within or across management units.
 License: GPL-2

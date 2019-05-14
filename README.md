@@ -1,16 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd (this file) -->
 
-# Connectedness
+# GCA
 
-An R package to 1) measure the connectedness across management units
-using genomic or pedigree data and 2) assess the connectedness between
-training and testing sets in genomic prediction.
+An R package to measure the connectedness across management units using
+genomic or pedigree data.
 
 ## Installation
 
-Connectedness is currently available in Github, and can be installed
-with devtools package:
+GCA is currently available in Github, and can be installed with devtools
+package:
 
 1.  Install `devtools` package from CRAN.
 
@@ -28,29 +27,29 @@ install.packages("devtools")
 library(devtools)
 ```
 
-3.  Install `Connectedness` package from
+3.  Install `GCA` package from
 Github.
 
 <!-- end list -->
 
 ``` r
-install_github('HaipengU/Connectedness', build_opts = c("--no-resave-data", "--no-manual"))
+install_github('HaipengU/GCA', build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
-4.  Load `Connectedness` package.
+4.  Load `GCA` package.
 
 <!-- end list -->
 
 ``` r
-library(Connectedness)
+library(GCA)
 ```
 
-5.  View `Connectedness` vignette.
+5.  View `GCA` vignette.
 
 <!-- end list -->
 
 ``` r
-vignette('Connectedness', package = 'Connectedness')
+vignette('GCA', package = 'GCA')
 ```
 
 ## Documentation
