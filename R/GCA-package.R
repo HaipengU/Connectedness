@@ -12,7 +12,7 @@
 #'
 #'
 #' @docType package
-#' @name GCA
+#' @name GCA-package
 #' @author HaipengYu \email{haipengyu@@vt.edu}
 #' @author Gota Morota \email{morota@vt.edu}
 #' 
