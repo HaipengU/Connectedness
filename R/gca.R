@@ -11,14 +11,17 @@
 #' computeA()
 #'
 #'
-#'@keywords internal
-"_PACKAGE"
 #' @author HaipengYu \email{haipengyu@@vt.edu}
 #' @author Gota Morota \email{morota@vt.edu}
-#' 
+#'
 #' @seealso 
 #' Useful links:
 #' \itemize{
 #'   \item <\url{https://haipengu.github.io/}>
 #' }
-NULL
+#' 
+#' 
+#'@keywords internal
+"_PACKAGE"
+
+

@@ -28,4 +28,15 @@ computeG()
 computeA()
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item <\url{https://haipengu.github.io/}>
+}
+}
+\author{
+HaipengYu \email{haipengyu@vt.edu}
+
+Gota Morota \email{morota@vt.edu}
+}
 \keyword{internal}
