@@ -244,7 +244,7 @@ where Var$(\widehat{b})_{i'i'}$, Var$(\widehat{b})_{j'j'}$ and Cov$(\widehat{b})
 \end{align*}
 
 ## Application of GCA package
-## Author
+## Authors
 - Haipeng Yu (<haipengyu@vt.edu>)
 - Gota Morota (<morota@vt.edu>) 
 
