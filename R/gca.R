@@ -11,7 +11,7 @@
 #' computeA()
 #'
 #'
-#' @author HaipengYu \email{haipengyu@@vt.edu}
+#' @author Haipeng Yu \email{haipengyu@@vt.edu}
 #' @author Gota Morota \email{morota@vt.edu}
 #'
 #' @seealso 

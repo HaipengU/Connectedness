@@ -35,7 +35,7 @@ Useful links:
 }
 }
 \author{
-HaipengYu \email{haipengyu@vt.edu}
+Haipeng Yu \email{haipengyu@vt.edu}
 
 Gota Morota \email{morota@vt.edu}
 }
