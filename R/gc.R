@@ -19,10 +19,9 @@
 #' 
 #' @export
 #' 
-gc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, 
-                MUScenario, statistic, NumofMU){
-  if (is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
-  Zi <- diag(x = 1, nrow = nrow(Kmatrix),ncol = nrow(Kmatrix))
+gc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU) {
+  if(is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
+  Zi <- diag(x = 1, nrow = nrow(Kmatrix), ncol = nrow(Kmatrix))
   Zitr <- t(Zi)
   diag(Kmatrix) <- diag(Kmatrix) + 0.00001
   Kinv <- solve(Kmatrix)

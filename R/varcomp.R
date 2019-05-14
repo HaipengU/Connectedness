@@ -17,7 +17,8 @@ varcomp <- function(y, Evector, Evalue){
   startVal <- c(0.5, 0.5)
   var.opt <- optim(fn = log.Lik, y=y, Evector = Evector, Evalue = Evalue, par = startVal,
                    hessian=FALSE) 
-  return(var.opt)
+  var.est <- list(Ve = var.opt$par[1] , Vu = var.opt$par[2])
+  return(var.est)
 }
 
 
