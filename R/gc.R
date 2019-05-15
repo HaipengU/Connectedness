@@ -92,6 +92,7 @@ gc.contrast <- function(statistic = statistic, Management_Unit = Management_Unit
         Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- 
           1 - (lamda* (crossprod(xcontrast,CuuK) %*% xcontrast) / (crossprod(xcontrast, Kmatrix) %*% xcontrast))
       } else if (statistic == 'r_contrast'){
+        PEVK <- CuuK * sigma2e
         rijK <- cov2cor(PEVK)
         Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- (crossprod(xcontrast, rijK) %*% xcontrast)
       }
