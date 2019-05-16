@@ -3,8 +3,8 @@
 
 # GCA
 
-An R package to measure the connectedness across management units using
-genomic or pedigree data.
+An R package for genetic connectedness analysis using pedigree and
+genomic data.
 
 ## Installation
 
