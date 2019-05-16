@@ -1,7 +1,7 @@
-#' \strong{GCA}: Measurement of genetic connectedness 
+#' \strong{GCA}: Genetic connectedness analysis
 #' 
-#' An R package to measure the connectedness across management units using genomic or pedigree data.
-#' @section Measure Connectedness:
+#' An R package for genetic connectedness analysis across units using pedigree and genomic data.
+#' @section Estimates of connectedness:
 #' gc()
 #' @section Estimate variance components:
 #' varcomp()

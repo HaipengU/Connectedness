@@ -4,11 +4,11 @@
 \name{GCA-package}
 \alias{GCA}
 \alias{GCA-package}
-\title{\strong{GCA}: Measurement of genetic connectedness}
+\title{\strong{GCA}: Genetic connectedness analysis}
 \description{
-An R package to measure the connectedness across management units using genomic or pedigree data.
+An R package for genetic connectedness analysis across units using pedigree and genomic data.
 }
-\section{Measure Connectedness}{
+\section{Estimates of connectedness}{
 
 gc()
 }
