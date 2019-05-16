@@ -2,7 +2,7 @@
 % Please edit documentation in R/gc.R
 \name{gc}
 \alias{gc}
-\title{Measurement of connectedness.}
+\title{Genetic connectedness analysis}
 \usage{
 gc(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU)
 }
@@ -26,7 +26,7 @@ A value of overall connectedness measurements across management units when Numof
 A matrix of connectedness measurments with diagnol as NA when when NumofMU is set as 'Pairwise'.
 }
 \description{
-The estimates of connectedness across management units using pedigree or genomic data.
+The estimates of genetic connectedness across units using pedigree and genomic data.
 }
 \examples{
 gc()
