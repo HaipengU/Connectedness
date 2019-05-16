@@ -1,6 +1,6 @@
-#' Measurement of connectedness.
+#' Genetic connectedness analysis
 #'
-#' The estimates of connectedness across management units using pedigree or genomic data.
+#' The estimates of genetic connectedness across units using pedigree and genomic data.
 #' 
 #' @param Kmatrix a n by n relationship matrix. 
 #' @param Xmatrix a design matrix which associates fixed effects with phenotypes. 

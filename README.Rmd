@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 # GCA
-An R package to measure the connectedness across management units using genomic or pedigree data. 
+An R package for genetic connectedness analysis using pedigree and genomic data. 
 
 ## Installation
 GCA is currently available in Github, and can be installed with devtools package: 
