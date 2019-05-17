@@ -2,4 +2,5 @@
 
 export(computeA)
 export(computeG)
+export(gcm)
 export(varcomp)
