@@ -11,15 +11,15 @@
 #' @param NumofMU number of management unit used to calculate connectedness. 
 #' 
 #' @return 
-#' A value of overall connectedness measurements across management units when NumofMU is set as 'Overall'.
+#' A value of overall connectedness measurements across units when NumofMU is set as 'Overall'.
 #' A matrix of connectedness measurments with diagnol as NA when when NumofMU is set as 'Pairwise'.
 #' 
 #' @examples 
-#' gc()
+#' gcm()
 #' 
 #' @export
 #' 
-gc <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU) {
+gcm <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU) {
   if(is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
   Zi <- diag(x = 1, nrow = nrow(Kmatrix), ncol = nrow(Kmatrix))
   Zitr <- t(Zi)
