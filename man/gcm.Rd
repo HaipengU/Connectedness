@@ -4,12 +4,13 @@
 \alias{gcm}
 \title{Genetic connectedness analysis}
 \usage{
-gcm(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU)
+gcm(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU,
+  Uidx = NULL, scale = TRUE, diag = TRUE)
 }
 \arguments{
 \item{Kmatrix}{a n by n relationship matrix.}
 
-\item{Xmatrix}{a design matrix which associates fixed effects with phenotypes.}
+\item{Xmatrix}{a design matrix which associates fixed effects with phenotypes and the intercept is excluded. The first column should start with design matrix of unit effects, followed with other fixed effects if applicable.}
 
 \item{sigma2a}{additive genetic variance.}
 
@@ -19,7 +20,13 @@ gcm(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU)
 
 \item{statistic}{a statistic which will be used to measure connectedness.}
 
-\item{NumofMU}{number of management unit used to calculate connectedness.}
+\item{NumofMU}{number of management unit ('Pairwise' or 'Overall') used to calculate connectedness.}
+
+\item{Uidx}{a interger to indicate the last column of unit effects in X matrix. This Uidx is required for statistics VED2, CDVED2 and CR2. The default is NULL.}
+
+\item{scale}{logical argument. Should sigma2a be used to scale statistic (e.g., PEVD_IdAve, PEVD_GrpAve, PEVD_contrast, VED0, VED1 and VED2) to remove units? Default is TRUE.}
+
+\item{diag}{logical argument. Should diagnoal elements of PEV matrix (e.g., PEVD_GrpAve, CD_GrpAve and r_GrpAve) or K matrix (CDVED0, CDVED1 and CDVED2) be included? Default is TRUE.}
 }
 \value{
 A value of overall connectedness measurements across units when NumofMU is set as 'Overall'.
