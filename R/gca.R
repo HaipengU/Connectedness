@@ -2,7 +2,7 @@
 #' 
 #' An R package for genetic connectedness analysis across units using pedigree and genomic data.
 #' @section Estimates of connectedness:
-#' gc()
+#' gcm()
 #' @section Estimate variance components:
 #' varcomp()
 #' @section Compute genomic relationship matrix:
