@@ -5,6 +5,7 @@ output:
     theme: architect
     highlight: vignette
     toc: true
+    toc_depth: 4
 bibliography: references.bib
 vignette: >
   %\VignetteIndexEntry{GCA}
@@ -12,23 +13,23 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 ## Introduction
-Genetic connectedness quantities the extent of linkage between individuals across management units. The concept of genetic connectedness can be extended to measure a connectedness level between training and testing sets in the whole-genome prediction area. However, there is no user-friendly R package that offers a comprehensive list of connectedness metrics. In this project, we aim to develop an R package, which utilizes either pedigree or genomic data to measure the connectedness between individuals across units.
+Genetic connectedness quantities the extent of linkage between individuals across management units. The concept of genetic connectedness can be extended to measure a connectedness level between training and testing sets in the whole-genome prediction area. However, there is no user-friendly R package that offers a comprehensive list of connectedness metrics. In this project, we aim to develop an R package, which utilizes either pedigree or genomic data to measure the connectedness between individuals across units. 
 
-This package will implement three connectedness metrics including prediction error variance of difference (PEVD), coefficient of determination (CD) and prediction error correlation (r), coupled with four summary methods for each statistic. 
-For example, the PEVD across units will be summarized as 1) average PEV of all pairwise differences between individuals across units; 2) average PEV within and across units; 3) replace averaged PEV within and across units with a corrected variance of unit effects estimates; 4) use a contrast vector. Analogous summary methods will be also applied to CD and r statistics. Three additional metrics, which approximate connectedness using variance of unit effect size estimates will be included such as variance of differences in units effects (VED), coefficient of determination, and connectedness rating (CR). Prediction error variance (PEV), the kernel of connectedness statistics, will be computed from the left-hand side coefficient matrix of the mixed model equation and directly derived from variance of estimates of unit effects with a fixed effects correction.
+This package implements three connectedness metrics which are functions of prediction error variance (PEV) matrix,  including prediction error variance of difference (PEVD), coefficient of determination (CD) and prediction error correlation (r), coupled with three summary methods for each statistic. 
+For example, the PEVD across units is summarized as 1) average PEV of all pairwise differences between individuals across units; 2) average PEV within and across units; 3) use a contrast vector. Analogous summary methods will be also applied to CD and r statistics. 
+Three additional metrics approximating connectedness using variance of estimates of unit effects (VE) are included, such as variance of estimates of units effects difference (VED), coefficient of determination of VED (CDVED), and connectedness rating (CR). Within each metric, three different methods are names according to the number of corrected factors (e.g., 0, 1 and 2) for fixed effects, such as VED0, VED1 and VED2. Similar corrected function is also applied for metrics of CDVED and CR. 
 
-This R package will be hosted on a GitHub page accompanied by a detailed vignette document including reproducible examples. The core functions of the R code will be rewritten with C++ to improve computational speed by taking the advantage of the Rcpp package. Furthermore, a graphical user interface will be created using a Shiny application. This application will provide an interactive visualization of connectedness measure outcomes. We expect this R package combined with Shiny will provide a comprehensive tool for connectedness analysis. 
+This R package is hosting on a GitHub page accompanied with a detailed vignette document. The core functions of the R code are rewritten with C++ to improve computational speed by taking the advantage of the Rcpp package. We expect this R package will provide a comprehensive tool for genetic connectedness analysis and whole genome prediction. 
 
+## Core functions of connectedness metrics
+### Prediction Error Variance 
 
-## Kernels of Connectedness Statistics
-**Prediction Error Variance (PEV)**
-
-|       Connectedness is typically defined as a function of the inverse of the coefficient matrix (i.e., Prediction error variance (PEV)). The PEV can be obtained from Henderson's mixed model equations (MME) [@Henderson1984]. Assume a standard linear mixed model $\mathbf{y} = \mathbf{Xb} + \mathbf{Zu} + \boldsymbol{\epsilon}$, where $\mathbf{y}$, $\mathbf{b}$, $\mathbf{u}$ and $\boldsymbol{\epsilon}$ refer to a vector of phenotypes, effects of management units, random additive genetic effects and residuals, respectively. The $\mathbf{X}$ and $\mathbf{Z}$ are incidence matrices which associate management units effects and individuals to phenotypes, respectively. The variance-covariance structure of this mixed model follows 
+A PEV matrix typically serves as the kernel of connectedness measures, which can be obtained from Henderson's mixed model equations (MME) [@Henderson1984]. Assume a standard linear mixed model $\mathbf{y} = \mathbf{Xb} + \mathbf{Zu} + \boldsymbol{\epsilon}$, where $\mathbf{y}$, $\mathbf{b}$, $\mathbf{u}$ and $\boldsymbol{\epsilon}$ refer to a vector of phenotypes, effects of management units, random additive genetic effects and residuals, respectively. The $\mathbf{X}$ and $\mathbf{Z}$ are incidence matrices which associate management units effects and individuals to phenotypes, respectively. The variance-covariance structure of this mixed model follows 
 \begin{align*}
 \begin{pmatrix}
 \mathbf{y} \\
@@ -89,25 +90,33 @@ With this, the PEV of $u$ is defined as [@Henderson1984]
 \end{align*}
 where $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}' \mathbf{X})^{-}\mathbf{X}'$ is the absorption (projection) matrix for fixed effects. 
 
-**Variance of Estimates of Management Units Effects(Var($\widehat{b}$))**
+### Variance of estimates of management units effects
 
-|       The derivation of PEV results in a high computational demanding for the high-dimensional dataset. Alternatively, @kennedy1993considerations proposed an approximation of PEV mean (PEV_Mean) with variance of management units estimates, which is 
-$$ \text{Var}(\widehat{b}) = [\mathbf{X}' \mathbf{X} - \mathbf{X}' \mathbf{Z}(\mathbf{Z'Z} + \mathbf{K}^{-1} \lambda)^{-1}\mathbf{Z}' \mathbf{X}]^{-1}\sigma^2_{\epsilon}.$$
-@holmes2017 proposed a function of $\text{Var}(\widehat{b})$ to approximate PEV_Mean as
-$$ \text{PEV_Mean} = \text{Var}(\widehat{b}) - \sigma^2_{\epsilon} (\mathbf{X}' \mathbf{X})^{-1}.$$
+The derivation of PEV oftentimes results in a heavy computational demanding for the high-dimensional dataset. @kennedy1993considerations proposed a direct approximation of mean PEV over unit (PEV_Mean) based on VE, that is
 
-This function corrects the number of records within management units, which is the only fixed effect included in the model. An alternative function to approximate the mean of PEV by accounting for the additional fixed effects in the model [@holmes2017]
 \begin{align}
+\text{Var}(\widehat{b}) = [\mathbf{X}' \mathbf{X} - \mathbf{X}' \mathbf{Z}(\mathbf{Z'Z} + \mathbf{K}^{-1} \lambda)^{-1}\mathbf{Z}' \mathbf{X}]^{-1}\sigma^2_{\epsilon}.
+\end{align}
+
+However, @holmes2017 pointed out this equation is not an exact approximation of PEV_Mean, and an according correction is suggested to achieve the equality. When unit effect is the only fixed effect including in the model, an approximate mean of PEV over unit is 
+\begin{equation*}
+\text{PEV_Mean} = \text{Var}(\widehat{b}) - \sigma^2_{\epsilon} (\mathbf{X}' \mathbf{X})^{-1},
+\end{equation*}
+where $\sigma^2_{\epsilon} (\mathbf{X}' \mathbf{X})^{-1}$ corrects the number of records within management units. An additional correction was added to derive the mean of PEV over unit which accounts for the additional fixed effects excepts unit effect in the model as [@holmes2017]
+\begin{align*}
 \text{PEV_Mean} &= \text{Var}(\widehat{b_1}) - \sigma^2_{\epsilon} (\mathbf{X_1}' \mathbf{X_1})^{-1} \\
 & + (\mathbf{X_1}'\mathbf{X_1})^{-1}\mathbf{X_1}'\mathbf{X_2}\text{Var}(\widehat{b_2})\mathbf{X_2}'\mathbf{X_1}(\mathbf{X_1}'\mathbf{X_1})^{-1} \\
 & + (\mathbf{X_1}'\mathbf{X_1})^{-1}\mathbf{X_1}'\mathbf{X_2}\text{Cov}(\widehat{b_2}, \widehat{b_1}) \\
 & + \text{Cov}(\widehat{b_1}, \widehat{b_2})\mathbf{X_2}'\mathbf{X_1}(\mathbf{X_1}'\mathbf{X_1})^{-1}
-\end{align}
+\end{align*}
 where the $\mathbf{X_1}$ and $\mathbf{X_2}$ represent incidence matrix for management units and other fixed effects, respectively. The $\widehat{b_1}$ refers to the estimates of management units effects, and $\widehat{b_2}$ indicates the estimates of other fixed effects.
 
-## Connectedness Statistics
-### Prediction Error Variance of Difference (PEVD)
-|       The PEVD [@kennedy1993considerations] measures the prediction error variance difference of breeding values between individuals from different management units. The PEVD between two individuals of $i$ and $j$ can be expressed as
+## Connectedness Metrics
+In general, connectedness metrics can be grouped into two sets, which are the function of PEV and VE, respectively. 
+
+### Function of PEV
+#### Prediction Error Variance of Difference 
+The PEVD [@kennedy1993considerations] measures the prediction error variance difference of breeding values between individuals from different management units. The PEVD between two individuals of $i$ and $j$ can be expressed as
 \begin{align*} 
  \text{PEVD}(\widehat{u_i} - \widehat{u_j})  &= [ \text{PEV}(\widehat{u_i}) + \text{PEV}(\widehat{u_j}) - 2  \text{PEC}(\widehat{u_i}, \widehat{u_j})]  \\
  &= (\mathbf{C}^{22}_{ii} - \mathbf{C}^{22}_{ij} - \mathbf{C}^{22}_{ji} + \mathbf{C}^{22}_{jj}) \sigma^2_{\epsilon} \\
@@ -136,15 +145,7 @@ Alternatively, a summary of PEVD across any pair of management units under a con
 \end{align*} 
 where the sum of elements in $\mathbf{x}$ equals to zero. 
 
-- **PEVD with corrected $\text{Var}(\widehat{b})$**
-@holmes2017 suggested quantifying group average PEVD using PEV_Mean
-\begin{align*}
-\text{PEVD}_{i'j'} &= \text{PEV_Mean}_{i'i'} + \text{PEV_Mean}_{j'j'} -2\text{PEV_Mean}_{i'j'},
-\end{align*}
-, where PEV_Mean could be directly derived from $\text{Var}(\widehat{b})$ by adding correction factors. 
-
-
-### Coefficient of Determination (CD)
+#### Coefficient of Determination 
 |       The coefficient of determination (CD) measures the precision of the estimates breeding values. The pairwise CD between individual $i$ and $j$ is defined as [@laloe1996]
 \begin{align*}
 \text{CD}_{ij} &= \frac{\text{Var}(\mathbf{u}) - \text{Var}(\mathbf{u}|\mathbf{\widehat{u}})}{\text{Var}(\mathbf{u})} \\
@@ -178,16 +179,8 @@ A contrast notation of summary CD between any pair of management units is [@lalo
 \end{align*}
 where $\mathbf{x}$ and $\mathbf{K}$ is a contrast vector and a relationship matrix defined above. 
 
-- **CD with corrected $\text{Var}(\widehat{b})$**
-Analogously, CD could be calculated with a correction of $\text{Var}(\widehat{b})$ (@holmes2017) as 
-\begin{align*}
-\text{CD}_{i'j'} &= 1 - \frac{\sigma^2_e \cdot \overline{\mathbf{C^{22}}}_{i'i'} + \overline{\mathbf{C^{22}}}_{j'j'} -2\overline{\mathbf{C^{22}}}_{i'j'}}{\sigma^2_u \cdot  (\overline{\mathbf{K}}_{i'i'} + \overline{\mathbf{K}}_{j'j'} - 2\overline{\mathbf{K}}_{i'j'})}\\
-&= 1 - \frac{\text{PEV_Mean}_{i'i'} + \text{PEV_Mean}_{j'j'} -2\text{PEV_Mean}_{i'j'}}{\sigma^2_u \cdot (\overline{\mathbf{K}}_{i'i'} + \overline{\mathbf{K}}_{j'j'} - 2\overline{\mathbf{K}}_{i'j'})}.
-\end{align*}
 
-The $\text{PEV_Mean}_{i'i'}$, $\text{PEV_Mean}_{j'j'}$ and $\text{PEV_Mean}_{i'j'}$ are average of PEV in management unit $i'$, $j'$ and average of prediction covariance between management units $i'$ and $j'$, respectively. 
-
-### Prediction Error Correlation (r)
+#### Prediction Error Correlation 
 |       The pairwise r statistic [@lewis1999] between individual $i$ and $j$ can be derived from PEV matrix to a predictive error correlation matrix as 
 \begin{align*}
 \text{r}_{ij} = \frac{\text{PEC}(\widehat{u_i}, \widehat{u_j})}{\sqrt{\text{PEV}(\widehat{u_i}) \cdot \text{PEV}(\widehat{u_j})}}.
@@ -215,35 +208,136 @@ We can also summarize r under a contrast format
 \end{align*}
 The $\mathbf{r}$ is a correlation matrix with the element of $r_{ij} = \frac{\text{PEC}(\widehat{u_i}, \widehat{u_j})}{\sqrt{\text{PEV}(\widehat{u_i}) \cdot \text{PEV}(\widehat{u_j})}}$, which indicates the paiwise prdiction error correlation between individual $i$ and $j$. 
 
-- **r with corrected $\text{Var}(\widehat{b})$**
-The prediction error correlation can be derived with aforementioned correction of variance of estimates of management units effects [@holmes2017] 
-\begin{align*}
-\text{r}_{i'j'} &= \frac{\text{PEV_Mean}_{i'j'}}{\sqrt{\text{PEV_Mean}_{i' i'} \cdot \text{PEV_Mean}_{j' j'}}}. 
-\end{align*}
-
-### Variance of Differences in Management Units Effects (VED)
-|       The VED[@kennedy1993considerations] statistic estimates connectedness with the variance of differences of management units effects. The VED between two units $i'$ and $j'$ is defined as
+### Function of VE
+#### Variance of estimates of unit effects differences
+- **VED0**
+The VED0[@kennedy1993considerations] statistic estimates connectedness with the variance of differences of management units effects. The VED between two units $i'$ and $j'$ is defined as
 \begin{align*}
 \text{VED}_{i'j'} &=
 \text{Var}(\widehat{b})_{i'i'} + \text{Var}(\widehat{b})_{j'j'} - 2\text{Cov}(\widehat{b})_{i'j'},
 \end{align*}
 where Var$(\widehat{b})_{i'i'}$, Var$(\widehat{b})_{j'j'}$ and Cov$(\widehat{b})_{i'j'}$ indicate variance of management unit $i'$, $j'$ and covariance between two units, respectively. 
 
-### Coefficient of Determination Approximation
-|       We can also use the variance of estimates management units effects to approximate CD as 
+- **VED1 & VED2**
+@holmes2017 suggested quantifying group average PEVD using PEV_Mean
+\begin{align*}
+\text{PEVD}_{i'j'} &= \text{PEV_Mean}_{i'i'} + \text{PEV_Mean}_{j'j'} -2\text{PEV_Mean}_{i'j'},
+\end{align*}
+, where PEV_Mean could be directly derived from $\text{Var}(\widehat{b})$ by adding correction factors. 
+
+
+#### Coefficient of Determination of VED
+- **CDVED0**
+We can also use the variance of estimates management units effects to approximate CD as 
 \begin{align*}
 \text{CD}_{i'j'} &= 1 - \frac{\text{Var}(\widehat{b})_{i'i'} + \text{Var}(\widehat{b})_{j'j'} - 2\text{Cov}(\widehat{b})_{i'j'}}{\sigma^2_u \cdot (\overline{\mathbf{K}}_{i'i'} + \overline{\mathbf{K}}_{j'j'} - 2\overline{\mathbf{K}}_{i'j'})}.
 \end{align*}
 
+- **CDVED1 & CDVED2**
+Analogously, CD could be calculated with a correction of $\text{Var}(\widehat{b})$ (@holmes2017) as 
+\begin{align*}
+\text{CD}_{i'j'} &= 1 - \frac{\sigma^2_e \cdot \overline{\mathbf{C^{22}}}_{i'i'} + \overline{\mathbf{C^{22}}}_{j'j'} -2\overline{\mathbf{C^{22}}}_{i'j'}}{\sigma^2_u \cdot  (\overline{\mathbf{K}}_{i'i'} + \overline{\mathbf{K}}_{j'j'} - 2\overline{\mathbf{K}}_{i'j'})}\\
+&= 1 - \frac{\text{PEV_Mean}_{i'i'} + \text{PEV_Mean}_{j'j'} -2\text{PEV_Mean}_{i'j'}}{\sigma^2_u \cdot (\overline{\mathbf{K}}_{i'i'} + \overline{\mathbf{K}}_{j'j'} - 2\overline{\mathbf{K}}_{i'j'})}.
+\end{align*}
 
-### Connectedness Rating (CR)
-|       @mathur2002 proposed using CR approximates flock connectedness by replacing PEV matrix with the variance of differences of management units estimates. The CR of two management units $i'$ and $j'$ is given by
+The $\text{PEV_Mean}_{i'i'}$, $\text{PEV_Mean}_{j'j'}$ and $\text{PEV_Mean}_{i'j'}$ are average PEV over management unit $i'$, $j'$ and average of prediction error covariance between management units $i'$ and $j'$, respectively.
+
+
+#### Connectedness Rating (CR)
+- **CRO** @mathur2002 proposed using CR approximates flock connectedness by replacing PEV matrix with the variance of differences of management units estimates. The CR of two management units $i'$ and $j'$ is given by
 \begin{align*}
 \text{CR}_{i'j'} &=
 \frac{\text{Cov}(\widehat{b})_{i'j'} }{ \sqrt{ \text{Var}(\widehat{b})_{i'i'} \cdot  \text{Var}(\widehat{b})_{j'j'}}}.
 \end{align*}
 
+- **CR1 & CR2**
+The prediction error correlation can be derived with aforementioned correction of variance of estimates of management units effects [@holmes2017] 
+\begin{align*}
+\text{r}_{i'j'} &= \frac{\text{PEV_Mean}_{i'j'}}{\sqrt{\text{PEV_Mean}_{i' i'} \cdot \text{PEV_Mean}_{j' j'}}}. 
+\end{align*}
+
 ## Application of GCA package
+
+### Install GCA from Github
+```{r, results='hide', eval = FALSE}
+install.packages("devtools")
+library(devtools)
+install_github('HaipengU/GCA')
+library(GCA)
+```
+### Load example cattle dataset in GCA package. 
+
+The cattle dataset of `GCcattle` contains two files of `cattle.pheno` and `cattle.W`, which include phenotype and marker information, respectively. The details can be checked with `?GCcattle`. 
+
+```{r}
+library(GCA)
+data(GCcattle)
+dim(cattle.pheno) # phenotype
+dim(cattle.W) # marker matrix
+```
+
+### Example of connectedness across units.
+#### Individual average CD
+```{r}
+X <- model.matrix(~ -1 + factor(cattle.pheno$Unit)) # design matrix of unit effect with intercept excluded
+G <- computeG(cattle.W, maf = 0.05, type = 'G2') # genomic relationship matrix (VanRaden)
+EVD <- eigen(G) # eigendecomposition 
+var <- varcomp(y = cattle.pheno$Phenotype, Evector = EVD$vectors, Evalue = EVD$values) # variance component
+var$Vu # variance of additive genetic effects
+var$Ve # variance of residual
+CD_IdAve <- gcm(Kmatrix = G, Xmatrix = X, sigma2a = var$Vu, sigma2e = var$Ve, 
+                MUScenario = as.factor(cattle.pheno$Unit), statistic = 'CD_IdAve', NumofMU = 'Pairwise')
+CD_IdAve
+```
+
+The above example showed the individual average CD, which is a function of PEV and returned a pairwise connectedness between all units. Alternative, it can return an overall connectedness which averages all pairwise CD by setting 'NumofMU' to 'Overall' as
+```{r}
+CD_IdAve <- gcm(Kmatrix = G, Xmatrix = X, sigma2a = var$Vu, sigma2e = var$Ve, 
+                MUScenario = as.factor(cattle.pheno$Unit), statistic = 'CD_IdAve', NumofMU = 'Overall')
+CD_IdAve
+```
+
+#### Coefficient of determination of VED 
+We showed the CDVED1 in the following example, which is a function of VE. 
+```{r}
+CDVED1 <- gcm(Kmatrix = G, Xmatrix = X, sigma2a = var$Vu, sigma2e = var$Ve, 
+                MUScenario = as.factor(cattle.pheno$Unit), statistic = 'CDVED1', NumofMU = 'Pairwise')
+CDVED1
+```
+
+The above example only considered one fixed effect of unit in the model. When more than one fixed effect is included, we can account for these additional fixed effects using statistic 'CDVED2'
+```{r}
+X2 <- model.matrix(~ -1 + factor(cattle.pheno$Unit)
+                        + factor(cattle.pheno$Sex))
+CDVED2 <- gcm(Kmatrix = G, Uidx = 5, Xmatrix = X2, sigma2a = var$Vu, sigma2e = var$Ve,
+              MUScenario = as.factor(cattle.pheno$Unit), statistic = 'CDVED2', NumofMU = 'Pairwise')
+CDVED2
+```
+
+Notice that, we added additional argument of 'Uidx' in the above example, which is a interger to indicate the last column of unit effects in X matrix. More details can be checked with `?gcm`
+
+### Available connectedness metrics in GCA package.
+The following section lists all available metrics in GCA package, which can be called by setting the argument of 'statistic'.  
+
+- PEVD_IdAve : Individual average PEVD, the optional argument of 'scale' is available. 
+- PEVD_GrpAve : Groupd average PEVD, the optional arguments of 'scale' and 'diag' are available.
+- PEVD_contrast: Contrast PEVD, the optional argument of 'scale' is available.
+- CD_IdAve : Individual average CD.
+- Cd_GrpAve : Group average CD, the optional argument of 'diag' is available. 
+- CD_contrast : Contrast CD.
+- r_IdAve : Individual average r.
+- r_GrpAve : Group average r, the optional argument of 'diag' is available.
+- r_contrast : Contrast r. 
+- VED0 : Variance of estimate of unit effects differences. The optional argument of 'scale' is available.
+- VED1 : Variance of estimate of unit effects differences with the correction of unit effect. The optional argument of 'scale' is available.
+- VED2 : Variance of estimate of unit effects differences with the correction of unit effect and additional fixed effects. The additional argument of 'Uidx' is required and the optional argument of 'scale' is available. 
+- CDVED0 : Coefficient of determination of VED, the optional argument of 'diag' is available.
+- CDVED1 : Coefficient of determination of VED with the correction of unit effect. The optional argument of 'diag' is available.
+- CDVED2 : Coefficient of determination of VED with the correction of unit effect and additional fixed effects. The additional argument of 'Uidx' is required and the optional argument of 'diag' is available.
+- CR0 : Connectedness rating. 
+- CR1 : Connectedness rating with the correction of unit effect. 
+- CR2 : Connectedness rating with the correction of unit effect and additional fixed effects. The additional argument of 'Uidx' is required. 
+
 ## Authors
 - Haipeng Yu (<haipengyu@vt.edu>)
 - Gota Morota (<morota@vt.edu>) 
