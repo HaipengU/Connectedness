@@ -323,7 +323,7 @@ The following section lists all available metrics in GCA package, which can be c
 - PEVD_GrpAve : Groupd average PEVD, the optional arguments of 'scale' and 'diag' are available.
 - PEVD_contrast: Contrast PEVD, the optional argument of 'scale' is available.
 - CD_IdAve : Individual average CD.
-- Cd_GrpAve : Group average CD, the optional argument of 'diag' is available. 
+- CD_GrpAve : Group average CD, the optional argument of 'diag' is available. 
 - CD_contrast : Contrast CD.
 - r_IdAve : Individual average r.
 - r_GrpAve : Group average r, the optional argument of 'diag' is available.
