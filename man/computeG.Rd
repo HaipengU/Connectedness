@@ -11,7 +11,7 @@ computeG(Wmatrix, maf, type)
 
 \item{maf}{a minor allele frequency used for quality control; e.g., 0.05}
 
-\item{type}{a type of genomic relationship matrix}
+\item{type}{a type of genomic relationship matrix; e.g., 'G1', 'G2', 'G0.5', 'G1_s' and 'G2_s'}
 }
 \value{
 a n by n genomic relationship matrix.

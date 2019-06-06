@@ -4,8 +4,8 @@
 #' 
 #' @param Wmatrix a raw SNP marker matrix with dimension n by m, where n is individual and m is marker. 
 #' @param maf a minor allele frequency used for quality control; e.g., 0.05
-#' @param type a type of genomic relationship matrix 
-#' @return a n by n genomic relationship matrix.
+#' @param type a type of genomic relationship matrix; e.g., 'G1', 'G2', 'G0.5', 'G1_s' and 'G2_s'
+#' @return a n by n genomic relationship matrix. 
 #' 
 #' @examples 
 #' computeG()
