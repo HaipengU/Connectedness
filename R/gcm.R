@@ -27,11 +27,11 @@ gcm <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, Numof
   Zi <- diag(x = 1, nrow = nrow(Kmatrix), ncol = nrow(Kmatrix))
   Zitr <- t(Zi)
   diag(Kmatrix) <- diag(Kmatrix) + 0.00001
-  Kinv <- solve(Kmatrix)
+  Kinv <- chol2inv(chol(Kmatrix))
   lamda <- sigma2e/sigma2a
   X <- Xmatrix
-  Mabs <- diag(nrow(X)) - X %*% solve(crossprod(X)) %*% t(X)
-  CuuK = solve(Zitr %*% Mabs %*% Zi + Kinv * lamda)
+  Mabs <- diag(nrow(X)) - X %*% chol2inv(chol(crossprod(X))) %*% t(X)
+  CuuK = chol2inv(chol(Zitr %*% Mabs %*% Zi + Kinv * lamda))
   PEVK = CuuK * sigma2e
   Management_Unit <- unique(MUScenario)
   switch(statistic,
@@ -177,14 +177,14 @@ pevd.grpAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, Management_Unit = Manage
 # VED0; VED1; VED2
 ved.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, lamda = lamda,
                     X = X, Uidx = Uidx, sigma2a = sigma2a, sigma2e = sigma2e, Management_Unit = Management_Unit, scale = scale) {
-  C22_inv <- solve(crossprod(Zi) + Kinv * lamda)
-  var_Bhat <- solve(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X))) * sigma2e
+  C22_inv <- chol2inv(chol(crossprod(Zi) + Kinv * lamda))
+  var_Bhat <- chol2inv(chol(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X)))) * sigma2e
   Summary.Matrix <- matrix(NA, ncol = length(Management_Unit), nrow = length(Management_Unit))
   colnames(Summary.Matrix) <- rownames(Summary.Matrix) <- Management_Unit
   if(statistic == 'VED0') {
     PEV_mean <- var_Bhat
   } else if (statistic == 'VED1') {
-    cor_factor <- solve(crossprod(X)) * sigma2e
+    cor_factor <- chol2inv(chol(crossprod(X))) * sigma2e
     PEV_mean <- var_Bhat - cor_factor
   } else if (statistic == 'VED2') {
     if(is.null(Uidx)) stop("Please specify the length of unit effect in X matrix with argument of Uidx")
@@ -193,10 +193,12 @@ ved.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, lamda 
     if(m1 >= m) stop("This statistic requires Uidx to be smaller than the number of columns of X matrix")
     X1 <- X[, 1 : m1] # design matrix for MU
     X2 <- X[, -c(1 : m1)]
-    PEV_mean <- solve(crossprod(X1)) %*% crossprod(X1, X2) %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% 
-      crossprod(X2, X1) %*% solve(crossprod(X1)) + solve(crossprod(X1)) %*% crossprod(X1, X2) %*% 
-      var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% crossprod(X2, X1) %*% 
-      solve(crossprod(X1)) + var_Bhat[1 : m1, 1 : m1] - sigma2e * solve(crossprod(X1))
+    tX1X1_inv <- chol2inv(chol(crossprod(X1)))
+    tX1X2 <- crossprod(X1, X2)
+    tX2X1 <- crossprod(X2, X1)
+    PEV_mean <- tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% tX2X1 %*% tX1X1_inv + 
+      tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% tX2X1 %*% 
+      tX1X1_inv + var_Bhat[1 : m1, 1 : m1] - sigma2e * tX1X1_inv
   }
   for (i in 1 : ncol(Summary.Matrix) - 1) {
     for (j in (i + 1) : ncol(Summary.Matrix)) {
@@ -232,7 +234,7 @@ cd.idAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, Management_Unit = Managemen
       indexi <- which(MUScenario == Management_Unit[i])
       indexj <- which(MUScenario == Management_Unit[j])
       CD.Pairwise.unit[i, j] <- CD.Pairwise.unit[j, i] <- 
-        1- (mean(PEVD.Pairwise.all[indexi, indexj]) / (mean(K.diff.Pairwise.all[indexi, indexj]) * sigma2a))
+        1 - (mean(PEVD.Pairwise.all[indexi, indexj]) / (mean(K.diff.Pairwise.all[indexi, indexj]) * sigma2a))
     }
   }
   if (NumofMU == 'Pairwise') {
@@ -245,11 +247,9 @@ cd.idAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, Management_Unit = Managemen
 
 
 # Group Average CD
-cd.grpAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, 
-                      Management_Unit = Management_Unit, 
+cd.grpAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, Management_Unit = Management_Unit, 
                       MUScenario = MUScenario, NumofMU = NumofMU, sigma2a = sigma2a, diag = diag) {
-  CD.Pairwise.unit <- matrix(NA, ncol = length(Management_Unit), 
-                             nrow = length(Management_Unit))
+  CD.Pairwise.unit <- matrix(NA, ncol = length(Management_Unit), nrow = length(Management_Unit))
   colnames(CD.Pairwise.unit) <- rownames(CD.Pairwise.unit) <- Management_Unit
   for (i in 1 : (length(Management_Unit) - 1)) {
     for (j in (i + 1) : length(Management_Unit)) {
@@ -279,8 +279,8 @@ cd.grpAve <- function(PEVK = PEVK, Kmatrix = Kmatrix,
 cd.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, Kmatrix = Kmatrix, lamda = lamda,
                    X = X, Uidx = Uidx, sigma2e = sigma2e, sigma2a =sigma2a, Management_Unit = Management_Unit,
                    MUScenario = MUScenario, diag = diag) {
-  C22_inv <- solve(crossprod(Zi) + Kinv * lamda)
-  var_Bhat <- solve(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X))) * sigma2e
+  C22_inv <- chol2inv(chol(crossprod(Zi) + Kinv * lamda))
+  var_Bhat <- chol2inv(chol(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X)))) * sigma2e
   Summary.Matrix <- K.Pairwise.unit.diff <- matrix(NA, ncol = length(Management_Unit), nrow = length(Management_Unit))
   colnames(Summary.Matrix) <- rownames(Summary.Matrix) <- Management_Unit
   for (i in 1 : (length(Management_Unit) - 1)) {
@@ -296,7 +296,7 @@ cd.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, Kmatrix
   if(statistic == 'CDVED0') {
     PEV_mean <- var_Bhat
   } else if (statistic == 'CDVED1'){
-    cor_factor <- solve(crossprod(X)) * sigma2e
+    cor_factor <- chol2inv(chol(crossprod(X))) * sigma2e
     PEV_mean <- var_Bhat - cor_factor
   } else if (statistic == 'CDVED2'){
     if(is.null(Uidx)) stop("Please specify the length of unit effect in X matrix with argument of Uidx")
@@ -305,10 +305,12 @@ cd.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, Kmatrix
     if(m1 >= m) stop("This statistic requires Uidx to be smaller than the number of columns of X matrix")
     X1 <- X[, 1 : m1] # design matrix for MU
     X2 <- X[, -c(1 : m1)]
-    PEV_mean <- solve(crossprod(X1)) %*% crossprod(X1, X2) %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% 
-      crossprod(X2, X1) %*% solve(crossprod(X1)) + solve(crossprod(X1)) %*% crossprod(X1, X2) %*% 
-      var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% crossprod(X2, X1) %*% 
-      solve(crossprod(X1)) + var_Bhat[1 : m1, 1 : m1] - sigma2e * solve(crossprod(X1))
+    tX1X1_inv <- chol2inv(chol(crossprod(X1)))
+    tX1X2 <- crossprod(X1, X2)
+    tX2X1 <- crossprod(X2, X1)
+    PEV_mean <- tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% tX2X1 %*% tX1X1_inv + 
+      tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% tX2X1 %*% 
+      tX1X1_inv + var_Bhat[1 : m1, 1 : m1] - sigma2e * tX1X1_inv
   }
   for (i in 1 : ncol(Summary.Matrix) - 1) {
     for (j in (i + 1) : ncol(Summary.Matrix)) {
@@ -382,14 +384,14 @@ r.grpAve <- function(PEVK = PEVK, Kmatrix = Kmatrix, Management_Unit = Managemen
 # CR0, CR1, CR2
 r.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, lamda = lamda,
                   X = X, Uidx = Uidx, sigma2e = sigma2e, Management_Unit = Management_Unit) {
-  C22_inv <- solve(crossprod(Zi) + Kinv * lamda)
-  var_Bhat <- solve(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X))) * sigma2e
+  C22_inv <- chol2inv(chol(crossprod(Zi) + Kinv * lamda))
+  var_Bhat <- chol2inv(chol(crossprod(X) - (crossprod(X, Zi) %*% C22_inv %*% crossprod(Zi, X)))) * sigma2e
   Summary.Matrix <- matrix(NA, ncol = length(Management_Unit), nrow = length(Management_Unit))
   colnames(Summary.Matrix) <- rownames(Summary.Matrix) <- Management_Unit
   if(statistic == 'CR0') {
     PEV_mean <- var_Bhat
   } else if (statistic == 'CR1') {
-    cor_factor <- solve(crossprod(X)) * sigma2e
+    cor_factor <- chol2inv(chol(crossprod(X))) * sigma2e
     PEV_mean <- var_Bhat - cor_factor
   } else if (statistic == 'CR2') {
     if(is.null(Uidx)) stop("Please specify the length of unit effect in X matrix with argument of Uidx")
@@ -398,10 +400,12 @@ r.cor <- function(statistic = statistic, NumofMU, Zi = Zi, Kinv = Kinv, lamda = 
     if(m1 >= m) stop("This statistic requires Uidx to be smaller than the number of columns of X matrix")
     X1 <- X[, 1 : m1] # design matrix for MU
     X2 <- X[, -c(1 : m1)]
-    PEV_mean <- solve(crossprod(X1)) %*% crossprod(X1, X2) %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% 
-      crossprod(X2, X1) %*% solve(crossprod(X1)) + solve(crossprod(X1)) %*% crossprod(X1, X2) %*% 
-      var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% crossprod(X2, X1) %*% 
-      solve(crossprod(X1)) + var_Bhat[1 : m1, 1 : m1] - sigma2e * solve(crossprod(X1))
+    tX1X1_inv <- chol2inv(chol(crossprod(X1)))
+    tX1X2 <- crossprod(X1, X2)
+    tX2X1 <- crossprod(X2, X1)
+    PEV_mean <- tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, (m1 + 1) : m] %*% tX2X1 %*% tX1X1_inv + 
+      tX1X1_inv %*% tX1X2 %*% var_Bhat[(m1 + 1) : m, 1 : m1] + var_Bhat[1 : m1, (m1 + 1) : m] %*% tX2X1 %*% 
+      tX1X1_inv + var_Bhat[1 : m1, 1 : m1] - sigma2e * tX1X1_inv
   }
   for (i in 1 : ncol(Summary.Matrix) - 1) {
     for (j in (i + 1) : ncol(Summary.Matrix)) {

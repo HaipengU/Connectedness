@@ -210,15 +210,15 @@ The $\mathbf{r}$ is a correlation matrix with the element of $r_{ij} = \frac{\te
 
 ### Function of VE
 #### Variance of estimates of unit effects differences
-- **VED0**
-The VED0[@kennedy1993considerations] statistic estimates connectedness with the variance of differences of management units effects. The VED between two units $i'$ and $j'$ is defined as
+- **VED0**:
+Using the summary method of the group average PEVD, the VED0 [@kennedy1993considerations] statistic estimates connectedness with VE rather than PEV_Mean. The VED0 between two units $i'$ and $j'$ is defined as
 \begin{align*}
-\text{VED}_{i'j'} &=
+\text{VED0}_{i'j'} &=
 \text{Var}(\widehat{b})_{i'i'} + \text{Var}(\widehat{b})_{j'j'} - 2\text{Cov}(\widehat{b})_{i'j'},
 \end{align*}
-where Var$(\widehat{b})_{i'i'}$, Var$(\widehat{b})_{j'j'}$ and Cov$(\widehat{b})_{i'j'}$ indicate variance of management unit $i'$, $j'$ and covariance between two units, respectively. 
+where the definition of $\text{Var}(\widehat{b})$, Cov$(\widehat{b})$ and $\overline{\mathbf{K}}$ are same as above.
 
-- **VED1 & VED2**
+- **VED1 & VED2**:
 @holmes2017 suggested quantifying group average PEVD using PEV_Mean
 \begin{align*}
 \text{PEVD}_{i'j'} &= \text{PEV_Mean}_{i'i'} + \text{PEV_Mean}_{j'j'} -2\text{PEV_Mean}_{i'j'},
@@ -244,7 +244,7 @@ The $\text{PEV_Mean}_{i'i'}$, $\text{PEV_Mean}_{j'j'}$ and $\text{PEV_Mean}_{i'j
 
 
 #### Connectedness Rating (CR)
-- **CRO** @mathur2002 proposed using CR approximates flock connectedness by replacing PEV matrix with the variance of differences of management units estimates. The CR of two management units $i'$ and $j'$ is given by
+- **CRO** @mathur2002 proposed using CR approximates flock connectedness by replacing PEV matrix with VE. The CR of two management units $i'$ and $j'$ is given by
 \begin{align*}
 \text{CR}_{i'j'} &=
 \frac{\text{Cov}(\widehat{b})_{i'j'} }{ \sqrt{ \text{Var}(\widehat{b})_{i'i'} \cdot  \text{Var}(\widehat{b})_{j'j'}}}.
