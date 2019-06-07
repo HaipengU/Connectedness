@@ -78,7 +78,6 @@ gcm <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, Numof
 gc.contrast <- function(statistic = statistic, Management_Unit = Management_Unit, MUScenario = MUScenario, Kmatrix = Kmatrix,
                         sigma2a = sigma2a, sigma2e = sigma2e, CuuK = CuuK, NumofMU = NumofMU, scale = scale) {
   Contrast_Matrix <-  matrix(NA, ncol = length(Management_Unit), nrow = length(Management_Unit))
-  colnames(Contrast_Matrix) <- rownames(Contrast_Matrix) <- Management_Unit
   for (i in 1 : (length(Management_Unit) - 1)) {
     for(j in (i + 1) : length(Management_Unit)) {
       xcontrast <- matrix(0, ncol = 1, nrow = ncol(Kmatrix))
@@ -88,20 +87,22 @@ gc.contrast <- function(statistic = statistic, Management_Unit = Management_Unit
       xcontrast[indexj] <- -1 / length(which(MUScenario == Management_Unit[j]))
       if (statistic == 'PEVD_contrast') {
         PEVK <- CuuK * sigma2e
-        if(scale) Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- (crossprod(xcontrast, PEVK) %*% xcontrast) / sigma2a
-        if(!scale) Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- (crossprod(xcontrast, PEVK) %*% xcontrast) 
+        if(scale) Contrast_Matrix[i,j] <- (crossprod(xcontrast, PEVK) %*% xcontrast) / sigma2a
+        if(!scale) Contrast_Matrix[i,j] <- (crossprod(xcontrast, PEVK) %*% xcontrast) 
       } else if (statistic == 'CD_contrast') {
         lamda <- sigma2e / sigma2a
-        Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- 
+        Contrast_Matrix[i,j] <- 
           1 - (lamda * (crossprod(xcontrast,CuuK) %*% xcontrast) / (crossprod(xcontrast, Kmatrix) %*% xcontrast))
       } else if (statistic == 'r_contrast') {
         PEVK <- CuuK * sigma2e
         rijK <- cov2cor(PEVK)
-        Contrast_Matrix[i,j] <- Contrast_Matrix[j,i] <- (crossprod(xcontrast, rijK) %*% xcontrast)
+        Contrast_Matrix[i,j] <- (crossprod(xcontrast, rijK) %*% xcontrast)
       }
     }
   }
   if (NumofMU == 'Pairwise') {
+    Contrast_Matrix[lower.tri(Contrast_Matrix)] <- t(Contrast_Matrix)[lower.tri(Contrast_Matrix)]
+    colnames(Contrast_Matrix) <- rownames(Contrast_Matrix) <- Management_Unit
     return(Contrast_Matrix)
   } else if (NumofMU == 'Overall') {
     Contrast_Matrix.overall <- mean(Contrast_Matrix[upper.tri(Contrast_Matrix)])
