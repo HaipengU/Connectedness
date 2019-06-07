@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 # GCA
-An R package for genetic connectedness analysis using pedigree and genomic data. 
+An R package for genetic connectedness analysis using pedigree and genomic data.
 
 ## Installation
 GCA is currently available in Github, and can be installed with devtools package: 
@@ -30,7 +30,7 @@ library(devtools)
 
 3. Install `GCA` package from Github.
 ```{r, warning = FALSE, results = 'hide', message = FALSE, eval = FALSE}
-install_github('HaipengU/GCA', build_opts = c("--no-resave-data", "--no-manual"))
+install_github('HaipengU/GCA_r', build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 4. Load `GCA` package. 

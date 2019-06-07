@@ -33,7 +33,7 @@ Github.
 <!-- end list -->
 
 ``` r
-install_github('HaipengU/GCA', build_opts = c("--no-resave-data", "--no-manual"))
+install_github('HaipengU/GCA_r', build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 4.  Load `GCA` package.
