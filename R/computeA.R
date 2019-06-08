@@ -7,8 +7,7 @@
 #' @param Dam a vector of Dams according to progenies, where the missing Dam is coded as 0
 #' @return a n by n numerator relationship matrix.
 #' 
-#' @examples 
-#' computeA()
+#' @examples man/examples/computeA.R
 #' 
 #' @export
 #' 

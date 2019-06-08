@@ -20,6 +20,6 @@ a n by n numerator relationship matrix.
 Use sorted pedigree to calculate numerator relationship matrix. The missing parents are coded as 0.
 }
 \examples{
-computeA()
+man/examples/computeA.R
 
 }
