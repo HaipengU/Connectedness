@@ -34,3 +34,8 @@ head(cattle.pheno)
 NRM <- computeA(Progeny = cattle.pheno$Progeny, Sire = cattle.pheno$Sire, 
 		Dam = cattle.pheno$Dam)
 }
+\author{
+Haipeng Yu \email{haipengyu@vt.edu}
+
+Gota Morota \email{morota@vt.edu}
+}

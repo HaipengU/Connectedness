@@ -1,49 +1,46 @@
-#' Computation of genomic relationship matrix with SNP markers.
+#' Compute genomic relationship matrix
 #'
-#' Use genomic relationship matrix to compute genomic connectedness.
+#' Use SNP markers to derive additive genomic relationship matrix. Missing marker is allowed and should be coded as NA. 
 #' 
-#' @param Wmatrix a raw SNP marker matrix with dimension n by m, where n is individual and m is marker. 
-#' @param maf a minor allele frequency used for quality control; e.g., 0.05
-#' @param type a type of genomic relationship matrix; e.g., 'G1', 'G2', 'G0.5', 'G1_s' and 'G2_s'
-#' @return a n by n genomic relationship matrix. 
+#' @param snpmatrix A marker matrix with a dimension of n by m and the elements are coded as 0, 1, 2 or NA, 
+#'   where n and m indicate the total number of individuals and markers, accordingly.  
+#' @param maf A minor allele frequency for quality control (e.g., 0.05).
+#' @param impute Imputation method for missing markers if applicable. Two methods of 'mean' and 'rbinom' are available, 
+#'   where the  'mean' imputes the missing marker using mean, and 'rbinom' imputes the missing marker by radom sampling from 
+#'   a binomial distribution. The default method is 'mean'. This argument will be ignored the \code{snpmatrix} does not inlcude missing markers. 
+#' @param method A type of genomic relationship matrix, which includes 'G1' and 'G2' (VanRaden 2008). 
+#' @return A n by n additive genomic relationship matrix. 
 #' 
-#' @examples 
-#' computeG()
+#' @author Haipeng Yu \email{haipengyu@@vt.edu}
+#' @author Gota Morota \email{morota@vt.edu}
 #' 
+#' @example man/examples/computeG.R
+#' 
+#' @references \emph{VanRaden, P.M., 2008. Efficient methods to compute genomic predictions. Journal of dairy science, 91(11), pp.4414-4423.}
 #' @export
-#' 
-computeG <- function(Wmatrix, maf, type) {
-  p1 <- (colMeans(Wmatrix, na.rm = T)/2)
-  set.seed(0)
-  for (j in 1:ncol(Wmatrix)) {
-    Wmatrix[,j] <- ifelse(is.na(Wmatrix[,j]), rbinom(1,2,p1[j]), Wmatrix[,j])
+computeG <- function(snpmatrix, maf, impute = 'mean', method) {
+  if(anyNA(snpmatrix)) {
+    for(j in 1 : ncol(snpmatrix)) {
+      if(impute == 'mean') {
+        snpmatrix[, j] <- ifelse(is.na(snpmatrix[, j]), mean(snpmatrix[, j], na.rm = TRUE), snpmatrix[, j])
+      } else if(impute == 'rbinom') {
+        set.seed(007) # reproducible imputation
+        p_temp <- (colMeans(snpmatrix, na.rm = T) / 2)
+        snpmatrix[, j] <- ifelse(is.na(snpmatrix[, j]), rbinom(1, 2, p_temp[j]), snpmatrix[, j])
+      }
+    }
   }
-  p2 <- colMeans(Wmatrix) / 2
-  maf2 <- pmin(p2, 1-p2)
-  maf.index <- which(maf2 < maf)
-  W <- Wmatrix[, -maf.index]
-  if (type == 'G1') { 
+  p <- colMeans(snpmatrix) / 2
+  maf_df <- pmin(p, 1-p)
+  maf.index <- which(maf_df < maf)
+  W <- snpmatrix[, -maf.index]
+  if (method == 'G1') { 
     W_c <- scale(W, center = TRUE, scale = FALSE)
-    G1 <- tcrossprod(W_c) / sum(2 * p2 * (1 - p2))
+    G1 <- tcrossprod(W_c) / sum(2 * p * (1 - p))
     return(G1)
-  } else if (type == 'G2'){
-    W_cs <- scale(W)
+  } else if (method == 'G2'){
+    W_cs <- scale(W, center = TRUE, scale = TRUE)
     G2 <- tcrossprod(W_cs) / ncol(W_cs)
     return(G2)
-  } else if (type == 'G0.5') {
-    W_cs <- (W - 2 * 0.5) / sqrt(2 * 0.5 * (1 - 0.5)) 
-    G0.5 <- tcrossprod(W_cs) / ncol(W_cs)
-    return(G0.5)
-  } else if (type == 'G1_s') {
-    W_c <- scale(W, center = TRUE, scale = FALSE)
-    G1 <- tcrossprod(W_c) / sum(2 * p2 * (1 - p2))
-    G1_s<- 2 * (G1 - min(G1)) / (max(G1) - min(G1))
-    return(G1_s)
-  } else if (type == 'G2_s') {
-    W_cs <- scale(W)
-    G2 <- tcrossprod(W_cs) / ncol(W_cs)
-    G2_s<- 2 * (G2 - min(G2)) / (max(G2) - min(G2))
-    return(G2_s)
-  }  
-} 
-
+  }
+}

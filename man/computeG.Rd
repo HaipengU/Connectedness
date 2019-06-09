@@ -2,24 +2,43 @@
 % Please edit documentation in R/computeG.R
 \name{computeG}
 \alias{computeG}
-\title{Computation of genomic relationship matrix with SNP markers.}
+\title{Compute genomic relationship matrix}
 \usage{
-computeG(Wmatrix, maf, type)
+computeG(snpmatrix, maf, impute = "mean", method)
 }
 \arguments{
-\item{Wmatrix}{a raw SNP marker matrix with dimension n by m, where n is individual and m is marker.}
+\item{snpmatrix}{A marker matrix with a dimension of n by m and the elements are coded as 0, 1, 2 or NA, 
+where n and m indicate the total number of individuals and markers, accordingly.}
 
-\item{maf}{a minor allele frequency used for quality control; e.g., 0.05}
+\item{maf}{A minor allele frequency for quality control (e.g., 0.05).}
 
-\item{type}{a type of genomic relationship matrix; e.g., 'G1', 'G2', 'G0.5', 'G1_s' and 'G2_s'}
+\item{impute}{Imputation method for missing markers if applicable. Two methods of 'mean' and 'rbinom' are available, 
+where the  'mean' imputes the missing marker using mean, and 'rbinom' imputes the missing marker by radom sampling from 
+a binomial distribution. The default method is 'mean'. This argument will be ignored the \code{snpmatrix} does not inlcude missing markers.}
+
+\item{method}{A type of genomic relationship matrix, which includes 'G1' and 'G2' (VanRaden 2008).}
 }
 \value{
-a n by n genomic relationship matrix.
+A n by n additive genomic relationship matrix.
 }
 \description{
-Use genomic relationship matrix to compute genomic connectedness.
+Use SNP markers to derive additive genomic relationship matrix. Missing marker is allowed and should be coded as NA.
 }
 \examples{
-computeG()
+# Load cattle data
+data(GCcattle)
 
+# Marker information
+str(cattle.W)
+
+# Compute genomic relationship matrix
+G <- computeG(cattle.W, maf = 0.05, impute = 'mean', method = 'G1')
+}
+\references{
+\emph{VanRaden, P.M., 2008. Efficient methods to compute genomic predictions. Journal of dairy science, 91(11), pp.4414-4423.}
+}
+\author{
+Haipeng Yu \email{haipengyu@vt.edu}
+
+Gota Morota \email{morota@vt.edu}
 }

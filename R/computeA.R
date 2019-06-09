@@ -8,6 +8,9 @@
 #' @param Dam A numeric vector of dams according to progenies in \code{Progeny} column.
 #' @return A n by n numerator relationship matrix, where n refers to total number of individuals in \code{Progeny} column.
 #' 
+#' @author Haipeng Yu \email{haipengyu@@vt.edu}
+#' @author Gota Morota \email{morota@vt.edu}
+#' 
 #' @example man/examples/computeA.R
 #' 
 #' @export
