@@ -2,22 +2,23 @@
 % Please edit documentation in R/computeA.R
 \name{computeA}
 \alias{computeA}
-\title{Computation of numerator relationship matrix.}
+\title{Compute numerator relationship matrix.}
 \usage{
 computeA(Progeny, Sire, Dam)
 }
 \arguments{
-\item{Progeny}{a vector of sorted animals}
+\item{Progeny}{A numeric vector of sorted progenies.}
 
-\item{Sire}{a vector of Sires according to progenies, where the missing Sire is coded as 0}
+\item{Sire}{A numeric vector of sires according to progenies in \code{Progeny} column.}
 
-\item{Dam}{a vector of Dams according to progenies, where the missing Dam is coded as 0}
+\item{Dam}{A numeric vector of dams according to progenies in \code{Progeny} column.}
 }
 \value{
-a n by n numerator relationship matrix.
+A n by n numerator relationship matrix, where n refers to total number of individuals in \code{Progeny} column.
 }
 \description{
-Use sorted pedigree to calculate numerator relationship matrix. The missing parents are coded as 0.
+Use sorted pedigree to calculate numerator relationship matrix, where the individual in \code{Progeny} must be ordered from old to young. 
+ The missing \code{Sire} and \code{Dam} are coded as 0.
 }
 \examples{
 # Load GCA package

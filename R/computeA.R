@@ -1,17 +1,21 @@
-#' Computation of numerator relationship matrix.
+#' Compute numerator relationship matrix.
 #'
-#' Use sorted pedigree to calculate numerator relationship matrix. The missing parents are coded as 0. 
+#' Use sorted pedigree to calculate numerator relationship matrix, where the individual in \code{Progeny} must be ordered from old to young. 
+#'  The missing \code{Sire} and \code{Dam} are coded as 0.
 #' 
-#' @param Progeny a vector of sorted animals
-#' @param Sire a vector of Sires according to progenies, where the missing Sire is coded as 0
-#' @param Dam a vector of Dams according to progenies, where the missing Dam is coded as 0
-#' @return a n by n numerator relationship matrix.
+#' @param Progeny A numeric vector of sorted progenies.
+#' @param Sire A numeric vector of sires according to progenies in \code{Progeny} column.
+#' @param Dam A numeric vector of dams according to progenies in \code{Progeny} column.
+#' @return A n by n numerator relationship matrix, where n refers to total number of individuals in \code{Progeny} column.
 #' 
 #' @example man/examples/computeA.R
 #' 
 #' @export
-#' 
 computeA <- function(Progeny, Sire, Dam){
+  if(!is.numeric(Progeny)) stop('Progeny is not numeric')
+  if(!is.numeric(Sire)) stop('Sire is not numeric')
+  if(!is.numeric(Dam)) stop('Dam is not numeric')
+  if(is.unsorted(Progeny)) stop('Pedigree must be sorted from old to young individuals')
   if (any(duplicated(Progeny))) stop("Progeny must be unique")
   n <- length(Progeny)
   A <- diag(n)
