@@ -16,10 +16,10 @@
 #' 
 #' @section Available functions in GCA package:
 #' \itemize{
-#'   \item `computeA()': Computation of numerator relationship matrix. 
-#'   \item `computeG()': Computation of genomic relationship matrix.
-#'   \item `gcm()': Measures of genetic connectedness.
-#'   \item `varcomp()': Estimates of variance components using eigenvalues and eigenvectors. 
+#'   \item computeA(): Computation of numerator relationship matrix. 
+#'   \item computeG(): Computation of genomic relationship matrix.
+#'   \item gcm(): Measures of genetic connectedness.
+#'   \item varcomp(): Estimates of variance components using eigenvalues and eigenvectors. 
 #' }
 #'
 #' @author Haipeng Yu and Gota Morota 
