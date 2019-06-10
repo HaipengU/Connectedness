@@ -11,8 +11,9 @@
 #' @param method A type of genomic relationship matrix, which includes 'G1' and 'G2' (VanRaden 2008). 
 #' @return A n by n additive genomic relationship matrix. 
 #' 
-#' @author Haipeng Yu \email{haipengyu@@vt.edu}
-#' @author Gota Morota \email{morota@vt.edu}
+#' @author Haipeng Yu and Gota Morota 
+#' 
+#' Maintainer: Haipeng Yu \email{haipengyu@@vt.edu}
 #' 
 #' @example man/examples/computeG.R
 #' 

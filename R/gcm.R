@@ -42,8 +42,9 @@
 #' A value of overall connectedness measurements across units when \code{NumofMU} is set as 'Overall'.
 #' A matrix of connectedness measurments with diagonal as NA when \code{NumofMU} is set as 'Pairwise'.
 #' 
-#' @author Haipeng Yu \email{haipengyu@@vt.edu}
-#' @author Gota Morota \email{morota@@vt.edu}
+#' @author Haipeng Yu and Gota Morota 
+#' 
+#' Maintainer: Haipeng Yu \email{haipengyu@@vt.edu}
 #'
 #' @example man/examples/gcm.R
 #' 

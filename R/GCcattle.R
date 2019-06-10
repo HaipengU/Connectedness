@@ -17,8 +17,9 @@
 #'   \item catlle.W: A 530 by 10,000 matrix, which contains marker information.
 #' }
 #'
-#' @author Haipeng Yu \email{haipengyu@@vt.edu}
-#' @author Gota Morota \email{morota@vt.edu}
+#' @author Haipeng Yu and Gota Morota 
+#' 
+#' Maintainer: Haipeng Yu \email{haipengyu@@vt.edu}
 #'
 #' @example man/examples/GCcattle.R 
 #' @references Sargolzaei, M., and F. S. Schenkel. 2009. Qmsim: a large-scale

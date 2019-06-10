@@ -13,8 +13,9 @@
 #'   \item{$Vu}{An estimate of additive genetic variance.}
 #' }
 #' 
-#' @author Haipeng Yu \email{haipengyu@@vt.edu}
-#' @author Gota Morota \email{morota@@vt.edu}
+#' @author Haipeng Yu and Gota Morota 
+#' 
+#' Maintainer: Haipeng Yu \email{haipengyu@@vt.edu}
 #' 
 #' @example man/examples/varcomp.R
 #' 
