@@ -5,13 +5,11 @@
 \alias{GCcattle}
 \title{Cattle dataset}
 \format{\itemize{
-  \item cattle.pheno: contains phenotype, fixed covariates and pedigree information.
-  \item catlle.W: contains marker information.
+  \item cattle.pheno: A matrix with a dimension of 530 x 6, which includes one phenotype, two fixed covariates and pedigree information.
+  \item catlle.W: A 530 by 10,000 matrix, which contains marker information.
 }}
 \usage{
 data(GCcattle)
-head(cattle.pheno)
-dim (cattle.W)
 }
 \description{
 The cattle dataset is simulated with QMSim software (Sargolzaei and Schenkel, 2009).   
@@ -19,8 +17,23 @@ This dataset includes 530 individuals across five generations (from founder to g
 each with 10,000 single nucleotide polymorphisms spread over 29 autosomes. Single phenotype with heritability of 0.6 was simulated.
 Two fixed covariates of sex and unit (management unit) are available.
 }
+\examples{
+# Load cattle dataset
+data(GCcattle)
+
+# Check phenotype, fixed covariates and pedigree information
+str(cattle.pheno)
+
+# Check marker information
+str(cattle.W)
+}
 \references{
 Sargolzaei, M., and F. S. Schenkel. 2009. Qmsim: a large-scale
-genome simulator for livestock. Bioinformatics 25:680–681. doi:10.1093/bioinformatics/btp045
+  genome simulator for livestock. Bioinformatics 25:680–681. doi:10.1093/bioinformatics/btp045
+}
+\author{
+Haipeng Yu \email{haipengyu@vt.edu}
+
+Gota Morota \email{morota@vt.edu}
 }
 \keyword{datasets}

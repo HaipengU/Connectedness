@@ -7,19 +7,46 @@
 varcomp(y, Evector, Evalue)
 }
 \arguments{
-\item{y}{a n by 1 vector of phenotypes.}
+\item{y}{A vector includes the phenotypes of n individuals.}
 
-\item{Evector}{a n by n matrix with columns according to eigenvectors.}
+\item{Evector}{A matrix  (n x n) with columns according to eigenvectors from the eigendecomposition of the relationship matrix.}
 
-\item{Evalue}{a vector contains the n eigenvalues.}
+\item{Evalue}{A vector which contains the eigenvalues of n individuals from the eigendecomposition of the relationship matrix.}
 }
 \value{
-A list of variance components.
+A list contains variance components
+\describe{
+  \item{\$Ve}{An estimate of residual variance.}
+  \item{\$Vu}{An estimate of additive genetic variance.}
+}
 }
 \description{
-Maximum Likelihood estimation of variance components with eigenvectors.
+Maximum Likelihood estimation of variance components using the eigenvalues and eigenvectors, 
+  which are derived from the eigendecomposition of the relationship matrix.
 }
 \examples{
-varcomp()
+# Load cattle data
+data(GCcattle)
 
+# Phenotype, fixed covariates and marker information
+str(cattle.pheno)
+str(cattle.W)
+
+# Compute genomic relationship matrix
+G <- computeG(cattle.W, maf = 0.05, impute = 'mean', method = 'G1')
+
+# Eigendecomposition of genomic relationship matrix
+EVD <- eigen(G)
+
+# Estimate variance component
+var <- varcomp(y = cattle.pheno$Phenotype, Evector = EVD$vectors, Evalue = EVD$values) 
+
+# Retrieve additive genetic variance and residual variance
+var$Vu
+var$Ve
+}
+\author{
+Haipeng Yu \email{haipengyu@vt.edu}
+
+Gota Morota \email{morota@vt.edu}
 }

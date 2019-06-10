@@ -7,20 +7,21 @@
 #'
 #' @docType data
 #' @name GCcattle
+#' @keywords datasets
 #' @usage 
 #' data(GCcattle)
-#' head(cattle.pheno)
-#' dim (cattle.W)
+#' 
 #' @format 
 #' \itemize{
-#'   \item cattle.pheno: contains phenotype, fixed covariates and pedigree information.
-#'   \item catlle.W: contains marker information.
+#'   \item cattle.pheno: A matrix with a dimension of 530 x 6, which includes one phenotype, two fixed covariates and pedigree information.
+#'   \item catlle.W: A 530 by 10,000 matrix, which contains marker information.
 #' }
 #'
-#' @keywords datasets
+#' @author Haipeng Yu \email{haipengyu@@vt.edu}
+#' @author Gota Morota \email{morota@vt.edu}
 #'
+#' @example man/examples/GCcattle.R 
 #' @references Sargolzaei, M., and F. S. Schenkel. 2009. Qmsim: a large-scale
-#' genome simulator for livestock. Bioinformatics 25:680–681. doi:10.1093/bioinformatics/btp045
-#'
+#'   genome simulator for livestock. Bioinformatics 25:680–681. doi:10.1093/bioinformatics/btp045
 NULL
 
