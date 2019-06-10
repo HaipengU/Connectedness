@@ -38,7 +38,7 @@ G <- computeG(cattle.W, maf = 0.05, impute = 'mean', method = 'G1')
 \emph{VanRaden, P.M., 2008. Efficient methods to compute genomic predictions. Journal of dairy science, 91(11), pp.4414-4423.}
 }
 \author{
-Haipeng Yu \email{haipengyu@vt.edu}
+Haipeng Yu and Gota Morota 
 
-Gota Morota \email{morota@vt.edu}
+Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }

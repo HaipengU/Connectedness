@@ -46,7 +46,7 @@ var$Vu
 var$Ve
 }
 \author{
-Haipeng Yu \email{haipengyu@vt.edu}
+Haipeng Yu and Gota Morota 
 
-Gota Morota \email{morota@vt.edu}
+Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }

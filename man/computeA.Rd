@@ -35,7 +35,7 @@ NRM <- computeA(Progeny = cattle.pheno$Progeny, Sire = cattle.pheno$Sire,
 		Dam = cattle.pheno$Dam)
 }
 \author{
-Haipeng Yu \email{haipengyu@vt.edu}
+Haipeng Yu and Gota Morota 
 
-Gota Morota \email{morota@vt.edu}
+Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }

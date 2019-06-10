@@ -32,8 +32,8 @@ Sargolzaei, M., and F. S. Schenkel. 2009. Qmsim: a large-scale
   genome simulator for livestock. Bioinformatics 25:680–681. doi:10.1093/bioinformatics/btp045
 }
 \author{
-Haipeng Yu \email{haipengyu@vt.edu}
+Haipeng Yu and Gota Morota 
 
-Gota Morota \email{morota@vt.edu}
+Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }
 \keyword{datasets}

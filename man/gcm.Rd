@@ -98,7 +98,7 @@ CDVED2 <- gcm(Kmatrix = G, Xmatrix = X2, sigma2a = var$Vu, sigma2e = var$Ve,
 
 }
 \author{
-Haipeng Yu \email{haipengyu@vt.edu}
+Haipeng Yu and Gota Morota 
 
-Gota Morota \email{morota@vt.edu}
+Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }
