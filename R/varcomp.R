@@ -14,7 +14,7 @@
 #' }
 #' 
 #' @author Haipeng Yu \email{haipengyu@@vt.edu}
-#' @author Gota Morota \email{morota@vt.edu}
+#' @author Gota Morota \email{morota@@vt.edu}
 #' 
 #' @example man/examples/varcomp.R
 #' 

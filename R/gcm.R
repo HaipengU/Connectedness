@@ -12,21 +12,42 @@
 #' \itemize{
 #'   \item 'PEVD_IdAve' : Individual average PEVD, the optional argument of 'scale' is available. 
 #'   \item 'PEVD_GrpAve' : Groupd average PEVD, the optional arguments of 'scale' and 'diag' are available.
+#'   \item 'PEVD_contrast' : Contrast PEVD, the optional argument of 'scale' is available.
+#'   \item 'CD_IdAve' : Individual average CD.
+#'   \item 'CD_GrpAve' : Group average CD, the optional argument of 'diag' is available.
+#'   \item 'CD_contrast' : Contrast CD.
+#'   \item 'r_IdAve' : Individual average r.
+#'   \item 'r_GrpAve' : Group average r, the optional argument of 'diag' is available.
+#'   \item 'r_contrast' : Contrast r. 
+#'   \item 'VED0' : Variance of estimate of unit effects differences. The optional argument of 'scale' is available.
+#'   \item 'VED1' : Variance of estimate of unit effects differences with the correction of unit effect. The optional argument of 'scale' is available.
+#'   \item 'VED2' : Variance of estimate of unit effects differences with the correction of unit effect and additional fixed effects. 
+#'     The additional argument of 'Uidx' is required and the optional argument of 'scale' is available. 
+#'   \item 'CDVED0' : Coefficient of determination of VED, the optional argument of 'diag' is available.
+#'   \item 'CDVED1' : Coefficient of determination of VED with the correction of unit effect. The optional argument of 'diag' is available.
+#'   \item 'CDVED2' : Coefficient of determination of VED with the correction of unit effect and additional fixed effects. 
+#'     The additional argument of 'Uidx' is required and the optional argument of 'diag' is available.
+#'   \item 'CR0' : Connectedness rating. 
+#'   \item 'CR1' : Connectedness rating with the correction of unit effect. 
+#'   \item 'CR2' : Connectedness rating with the correction of unit effect and additional fixed effects. The additional argument of 'Uidx' is required. 
 #' }
-#' @param NumofMU number of management unit ('Pairwise' or 'Overall') used to calculate connectedness.
-#' @param Uidx a interger to indicate the last column of unit effects in X matrix. This Uidx is required for statistics VED2, CDVED2 and CR2. The default is NULL. 
-#' @param scale logical argument. Should sigma2a be used to scale statistic (e.g., PEVD_IdAve, PEVD_GrpAve, PEVD_contrast, VED0, VED1 and VED2) to remove units? Default is TRUE.
-#' @param diag logical argument. Should diagnoal elements of PEV matrix (e.g., PEVD_GrpAve, CD_GrpAve and r_GrpAve) or K matrix (CDVED0, CDVED1 and CDVED2) be included? Default is TRUE.  
+#' @param NumofMU The number of management unit to summarize connectedness. The available options include 'Pairwise' and 'Overall', where the prior calculates 
+#'   the connectedness across all pairwise units, and the later averages all pairwise connectedness across units. 
+#' @param Uidx An interger to indicate the last column of unit effects in \code{Xmatrix}. This Uidx is required for statistics VED2, CDVED2 and CR2. The default is NULL. 
+#' @param scale Logical argument. Should \code{sigma2a} be used to scale \code{statistic} (e.g., PEVD_IdAve, PEVD_GrpAve, PEVD_contrast, VED0, VED1, and VED2) 
+#'   to remove units effects? Default is TRUE.
+#' @param diag Logical argument. Should diagonal elements of PEV matrix (e.g., PEVD_GrpAve, CD_GrpAve, and r_GrpAve) or K matrix (CDVED0, CDVED1, and CDVED2) be included? Default is TRUE.  
 #' 
 #' @return 
-#' A value of overall connectedness measurements across units when NumofMU is set as 'Overall'.
-#' A matrix of connectedness measurments with diagnol as NA when when NumofMU is set as 'Pairwise'.
+#' A value of overall connectedness measurements across units when \code{NumofMU} is set as 'Overall'.
+#' A matrix of connectedness measurments with diagonal as NA when \code{NumofMU} is set as 'Pairwise'.
 #' 
-#' @examples 
-#' gcm()
+#' @author Haipeng Yu \email{haipengyu@@vt.edu}
+#' @author Gota Morota \email{morota@@vt.edu}
+#'
+#' @example 
 #' 
 #' @export
-#' 
 gcm <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU, Uidx = NULL, scale = TRUE, diag = TRUE) {
   if(is.factor(MUScenario) != TRUE) stop("Management unit is not factor!")
   Zi <- diag(x = 1, nrow = nrow(Kmatrix), ncol = nrow(Kmatrix))
