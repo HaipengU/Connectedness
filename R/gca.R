@@ -22,7 +22,8 @@
 #'   \item `varcomp()': Estimates of variance components using eigenvalues and eigenvectors. 
 #' }
 #'
-#' @author Haipeng Yu and Gota Morota
+#' @author Haipeng Yu and Gota Morota 
+#' 
 #' Maintainer: Haipeng Yu \email{haipengyu@@vt.edu}
 #' 
 #' 

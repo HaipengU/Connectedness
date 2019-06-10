@@ -30,7 +30,8 @@ This package implements three connectedness metrics which are functions of predi
 }
 
 \author{
-Haipeng Yu and Gota Morota
+Haipeng Yu and Gota Morota 
+
 Maintainer: Haipeng Yu \email{haipengyu@vt.edu}
 }
 \keyword{internal}
