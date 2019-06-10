@@ -45,7 +45,7 @@
 #' @author Haipeng Yu \email{haipengyu@@vt.edu}
 #' @author Gota Morota \email{morota@@vt.edu}
 #'
-#' @example 
+#' @example man/examples/gcm.R
 #' 
 #' @export
 gcm <- function(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU, Uidx = NULL, scale = TRUE, diag = TRUE) {
