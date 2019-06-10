@@ -14,13 +14,12 @@
 #'  according to the number of corrected factors (e.g., 0, 1 and 2) for fixed effects, such as VED0, VED1 and VED2. Similar corrected 
 #'  function is also applied for metrics of CDVED and CR. 
 #' 
-#' @section Available functions in GCA package
+#' @section Available functions in GCA package:
 #' \itemize{
 #'   \item `computeA()': Computation of numerator relationship matrix. 
 #'   \item `computeG()': Computation of genomic relationship matrix.
 #'   \item `gcm()': Measures of genetic connectedness.
 #'   \item `varcomp()': Estimates of variance components using eigenvalues and eigenvectors. 
-#' 
 #' }
 #'
 #' @author Haipeng Yu and Gota Morota
