@@ -1,13 +1,18 @@
 #' Genetic connectedness analysis
 #'
-#' The estimates of genetic connectedness across units using pedigree and genomic data.
+#' Estimates genetic connectedness across units using pedigree or genomic data.
 #' 
-#' @param Kmatrix a n by n relationship matrix. 
-#' @param Xmatrix a design matrix which associates fixed effects with phenotypes and the intercept is excluded. The first column should start with design matrix of unit effects, followed with other fixed effects if applicable. 
-#' @param sigma2a additive genetic variance.
-#' @param sigma2e residual variance.
-#' @param MUScenario a vector of managment units which will be treatd as a factor. 
-#' @param statistic a statistic which will be used to measure connectedness.
+#' @param Kmatrix A relationship matrix with a dimension of n by n, where n refers to the total number of individuals.  
+#' @param Xmatrix A design matrix which associates fixed effects with phenotypes and the intercept is excluded. 
+#'   The first column of \code{Xmatrix} should start with design matrix of unit effects, following with other fixed effects if applicable. 
+#' @param sigma2a Additive genetic variance.
+#' @param sigma2e Residual variance.
+#' @param MUScenario A vector of units which will be treatd as a factor. 
+#' @param statistic A statistic measures genetic connectedness, which includes 
+#' \itemize{
+#'   \item 'PEVD_IdAve' : Individual average PEVD, the optional argument of 'scale' is available. 
+#'   \item 'PEVD_GrpAve' : Groupd average PEVD, the optional arguments of 'scale' and 'diag' are available.
+#' }
 #' @param NumofMU number of management unit ('Pairwise' or 'Overall') used to calculate connectedness.
 #' @param Uidx a interger to indicate the last column of unit effects in X matrix. This Uidx is required for statistics VED2, CDVED2 and CR2. The default is NULL. 
 #' @param scale logical argument. Should sigma2a be used to scale statistic (e.g., PEVD_IdAve, PEVD_GrpAve, PEVD_contrast, VED0, VED1 and VED2) to remove units? Default is TRUE.

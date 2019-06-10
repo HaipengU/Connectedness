@@ -16,8 +16,8 @@ varcomp(y, Evector, Evalue)
 \value{
 A list contains variance components
 \describe{
-  \item{\$Ve}{An estimate of residual variance.}
-  \item{\$Vu}{An estimate of additive genetic variance.}
+  \item{$Ve}{An estimate of residual variance.}
+  \item{$Vu}{An estimate of additive genetic variance.}
 }
 }
 \description{

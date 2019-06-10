@@ -8,17 +8,22 @@ gcm(Kmatrix, Xmatrix, sigma2a, sigma2e, MUScenario, statistic, NumofMU,
   Uidx = NULL, scale = TRUE, diag = TRUE)
 }
 \arguments{
-\item{Kmatrix}{a n by n relationship matrix.}
+\item{Kmatrix}{A relationship matrix with a dimension of n by n, where n refers to the total number of individuals.}
 
-\item{Xmatrix}{a design matrix which associates fixed effects with phenotypes and the intercept is excluded. The first column should start with design matrix of unit effects, followed with other fixed effects if applicable.}
+\item{Xmatrix}{A design matrix which associates fixed effects with phenotypes and the intercept is excluded. 
+The first column of \code{Xmatrix} should start with design matrix of unit effects, following with other fixed effects if applicable.}
 
-\item{sigma2a}{additive genetic variance.}
+\item{sigma2a}{Additive genetic variance.}
 
-\item{sigma2e}{residual variance.}
+\item{sigma2e}{Residual variance.}
 
-\item{MUScenario}{a vector of managment units which will be treatd as a factor.}
+\item{MUScenario}{A vector of units which will be treatd as a factor.}
 
-\item{statistic}{a statistic which will be used to measure connectedness.}
+\item{statistic}{A statistic measures genetic connectedness, which includes 
+\itemize{
+  \item 'PEVD_IdAve' : Individual average PEVD, the optional argument of 'scale' is available. 
+  \item 'PEVD_GrpAve' : Groupd average PEVD, the optional arguments of 'scale' and 'diag' are available.
+}}
 
 \item{NumofMU}{number of management unit ('Pairwise' or 'Overall') used to calculate connectedness.}
 
@@ -33,7 +38,7 @@ A value of overall connectedness measurements across units when NumofMU is set a
 A matrix of connectedness measurments with diagnol as NA when when NumofMU is set as 'Pairwise'.
 }
 \description{
-The estimates of genetic connectedness across units using pedigree and genomic data.
+Estimates genetic connectedness across units using pedigree or genomic data.
 }
 \examples{
 gcm()
