@@ -24,7 +24,7 @@ This package implements three connectedness metrics which are functions of predi
 \itemize{
   \item computeA(): Computation of numerator relationship matrix. 
   \item computeG(): Computation of genomic relationship matrix.
-  \item gcm(): Measures of genetic connectedness.
+  \item gca(): Measures of genetic connectedness.
   \item varcomp(): Estimates of variance components using eigenvalues and eigenvectors. 
 }
 }
